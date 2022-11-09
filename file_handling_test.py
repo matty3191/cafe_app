@@ -29,6 +29,10 @@ def convert_couriers_file_to_list():
 
 
 x = convert_couriers_file_to_list()
+
+#now i have the list available to me,
+# edit it in the same way i did before,
+#then find a way to save the changes ive made
 print(x)
 # write_couriers()
 # open_in_list()
