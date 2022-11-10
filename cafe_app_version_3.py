@@ -38,6 +38,43 @@ order_list.append(e)
 courier_list.append(f)
 courier_list.append(g)
 courier_list.append(h)
+# file calling and writing functions.
+# use the variable to edit internal values
+# use function calls to actuall call the files
+def convert_couriers_file_to_list():
+## returns a list of the .txt file specified with the \n character truncated ##
+    with open('data/couriers.txt', 'r') as cf:
+        courier_contents = cf.read().splitlines()
+        
+    return courier_contents
+
+def save_courier_files():
+    # opens file, uses for loop to add uodated list to file. saves and closes file.
+    with open('data/couriers.txt', 'w+') as csf:
+        for name in courier_file_list:
+            csf.write(name + "\n")
+
+
+def convert_products_file_to_list():
+## returns a list of the .txt file specified with the \n character truncated ##
+    with open('data/products.txt', 'r') as cf:
+        product_contents = cf.read().splitlines()
+        
+    return product_contents
+
+def save_product_files():
+    # opens file, uses for loop to add uodated list to file. saves and closes file.
+    with open('data/products.txt', 'w+') as csf:
+        for name in product_file_list:
+            csf.write(name + "\n")
+
+
+# assigns the returned values to a variable so the global scope code can use it
+convert_couriers_file_to_list()
+convert_products_file_to_list()
+product_file_list = convert_products_file_to_list()
+courier_file_list = convert_couriers_file_to_list()
+
 ######################################
 print("Howdy Partner, welcome to your custom cafe management app.\n")
 time.sleep(1)
@@ -63,6 +100,9 @@ def main_menu():
             courier_menu()        
     # persist everythin but orders then exit  
     # save data, close files
+    print("Saving data")
+    save_courier_files()
+    save_product_files()
     time.sleep(2)
     os.system('cls')
     print("Thank you for using Percival's Ugly Novel Kreation: PUNK")
@@ -97,36 +137,36 @@ Please select from the options below:\n\n
     main_menu()
 
 def view_products():
-    print(product_list)
+    print(product_file_list)
     product_menu()
 
 def create_new_product():
     # uses input to create list item. returns to p menu
     new_item = input("Please enter the name of the new product:\n")
-    product_list.append(new_item)
+    product_file_list.append(new_item)
     print(f"New item {new_item} has been added to the product list\n")
-    print(product_list)
+    print(product_file_list)
     product_menu()
 
 def update_product():
     # uses input to update list item. returns to p menu
-    for (i, item) in enumerate(product_list):
+    for (i, item) in enumerate(product_file_list):
         print(i, item, "\n")
     index_input = int((input("Please enter the index of the product you wish to update\n")))
-    print(f"You have selected {product_list[index_input]} to replace\n")
+    print(f"You have selected {product_file_list[index_input]} to replace\n")
     replace_input = input("\nPlease enter the new product you wish to replace an old product with.\n")
-    product_list[index_input] = replace_input
-    print(f"product list has been updated{product_list}\n")
+    product_file_list[index_input] = replace_input
+    print(f"product list has been updated{product_file_list}\n")
     product_menu()
 
 def delete_product():
     # uses input to delete list item. returns to p menu
-    for (i, item) in enumerate(product_list):
+    for (i, item) in enumerate(product_file_list):
         print(i, item, "\n")
     delete_input = int((input("Please enter the index of the product you wish to delete\n")))
-    print(f"You have removed {product_list[delete_input]} from the product list\n")
-    del product_list[delete_input]
-    print(product_list)
+    print(f"You have removed {product_file_list[delete_input]} from the product list\n")
+    del product_file_list[delete_input]
+    print(product_file_list)
     product_menu()
 
 ## orders menu ##
@@ -252,45 +292,43 @@ Please select from the options below:\n\n
     main_menu()
 
 def view_couriers():
-    print(courier_list)
+    print(courier_file_list)
     courier_menu()
 
 def create_new_courier():
     # uses input to create new courier. returns to c menu
     new_courier = input("Please enter the name of the new courier:\n")
-    courier_list.append(new_courier)
+    courier_file_list.append(new_courier)
     print(f"New courier, {new_courier}, has been added to the courier list\n")
-    print(courier_list)
+    print(courier_file_list)
     courier_menu()
 
 def update_courier():
     # uses input to update courier. returns to c menu
-    for (i, item) in enumerate(courier_list):
+    for (i, item) in enumerate(courier_file_list):
         print(i, item, "\n")
     index_input = int((input("Please enter the index of the courier you wish to update\n")))
-    print(f"You have selected {courier_list[index_input]} to replace\n")
+    print(f"You have selected {courier_file_list[index_input]} to replace\n")
     replace_input = input("\nPlease enter the new details of the courier.\n")
-    courier_list[index_input] = replace_input
-    print(f"Courier has been updated{courier_list}\n")
+    courier_file_list[index_input] = replace_input
+    print(f"Courier has been updated{courier_file_list}\n")
     courier_menu()
 
 def delete_courier():
     # uses input to delete courier from list. returns to c menu
-    for (i, item) in enumerate(courier_list):
+    for (i, item) in enumerate(courier_file_list):
         print(i, item, "\n")
     delete_input = int((input("Please enter the index of the courier you wish to delete\n")))
-    print(f"You have removed {courier_list[delete_input]} from the courier list\n")
-    del courier_list[delete_input]
-    print(courier_list)
+    print(f"You have removed {courier_file_list[delete_input]} from the courier list\n")
+    del courier_file_list[delete_input]
+    print(courier_file_list)
     courier_menu()
 
 def open_couriers():
     with open('data/couriers.txt', 'r') as cf:
         courier_contents = cf.read()
         print(courier_contents)
-        
-def open_products():
-    pass
+
 
 main_menu ()
 
