@@ -1,0 +1,13 @@
+customer_name: John,
+customer_address: Unit 2, 12 Main Street, London, WH1 2ER,
+customer_phone: 0789887334,
+assign_courier:,
+status: preparing,
+items: 
+
+customer_name: Philip J. Fry,
+customer_address: Planet Express, West 57th Street, Manhatten New New York, United States,
+customer_phone: 07300030001,
+assigne_courier:,
+status: half the world away,
+items : 

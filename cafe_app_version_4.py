@@ -1,79 +1,90 @@
 import os
 import time
+import csv
 
 ###################################### move this into .txt to persist
-a = "apple"
-b = "coffee"
-c = "sandwich"
-
-d = {
+items_list = [{
+        "name" : "apple",
+        "price" : 0.5
+    },{
+        "name" : "coffee", 
+        "price" : 7.00
+    },{
+        "name" : "sandwich", 
+        "price" : 3.00
+    }]
+deliver_driver_names = [{
+        "name" : "Postman Patrick",
+        "phone" : "0987654345"
+    },{
+        "name" : "Ramona Flowers",
+        "numer" : "094567834578""Rocinante"
+    }]
+pre_pop_orders = [{
         "customer_name": "John",
         "customer_address": "Unit 2, 12 Main Street, London, WH1 2ER",
         "customer_phone": "0789887334",
-        "status": "preparing"
-    }
-
-e = {
+        "assign_courier":"",
+        "status": "preparing",
+        "items": ""
+    },{
         "customer_name": "Philip J. Fry",
         "customer_address": "Planet Express, West 57th Street, Manhatten New New York, United States",
         "customer_phone": "07300030001",
-        "status": "half the world away"
+        "assigne_courier":"",
+        "status": "half the world away",
+        "items" : ""
     }
+    ]
 
-f = "Postman Patrick"
-g = "Ramona Flowers"
-h = "Rocinante"
+product_list = [item for item in items_list]
+order_list = [order for order in pre_pop_orders]
+courier_list = [name for name in deliver_driver_names]
 
-product_list = []
-order_list = [] ########## do not persist this yet
-courier_list = []
-
-product_list.append(a)
-product_list.append(b)
-product_list.append(c)
-
-order_list.append(d)
-order_list.append(e)
-
-courier_list.append(f)
-courier_list.append(g)
-courier_list.append(h)
-# file calling and writing functions.
-# use the variable to edit internal values
-# use function calls to actuall call the files
 def convert_couriers_file_to_list():
 ## returns a list of the .txt file specified with the \n character truncated ##
-    with open('data/couriers.txt', 'r') as cf:
+    with open('data/couriers.csv', 'r') as cf:
         courier_contents = cf.read().splitlines()
         
     return courier_contents
 
 def save_courier_files():
     # opens file, uses for loop to add uodated list to file. saves and closes file.
-    with open('data/couriers.txt', 'w+') as csf:
+    with open('data/couriers.csv', 'w+') as csf:
         for name in courier_file_list:
             csf.write(name + "\n")
 
-
 def convert_products_file_to_list():
 ## returns a list of the .txt file specified with the \n character truncated ##
-    with open('data/products.txt', 'r') as cf:
+    with open('data/products.csv', 'r') as cf:
         product_contents = cf.read().splitlines()
         
     return product_contents
 
 def save_product_files():
     # opens file, uses for loop to add uodated list to file. saves and closes file.
-    with open('data/products.txt', 'w+') as csf:
+    with open('data/products.csv', 'w+') as csf:
         for name in product_file_list:
             csf.write(name + "\n")
 
+def convert_orders_file_to_list():
+## returns a list of the .txt file specified with the \n character truncated ##
+    with open('data/orders.csv', 'r') as cf:
+        product_contents = cf.read().splitlines()
+        
+    return product_contents
 
-# assigns the returned values to a variable so the global scope code can use it
-convert_couriers_file_to_list()
-convert_products_file_to_list()
+def save_orders_files():
+    # opens file, uses for loop to add uodated list to file. saves and closes file.
+    with open('data/orders.csv', 'w+') as csf:
+        for name in product_file_list:
+            csf.write(name + "\n")
+
 product_file_list = convert_products_file_to_list()
 courier_file_list = convert_couriers_file_to_list()
+order_file_list = convert_orders_file_to_list()
+
+print(product_file_list, "\n", courier_file_list, "\n", order_file_list)
 
 ######################################
 print("Howdy Partner, welcome to your custom cafe management app.\n")
@@ -209,21 +220,17 @@ def create_new_order():
                     "customer_name":"",
                     "customer_address":"",
                     "customer_phone":"",
+                    "assigned_courier":"",
                     "status":""}
-    a = "customer_name"
-    b = "customer_address"
-    c = "customer_phone"
-    d = "status"
-    name_input = input("Enter Customer name: ")
-    address_input = input("Enter customer address: ")
-    phone_input = input("Enter customer phone number: ")
-    status_input = "Preparing"
-    new_order[a] = name_input
-    new_order[b] = address_input
-    new_order[c] = phone_input
-    new_order[d] = status_input
+    new_order["customer_name"] = input("Enter Customer name: ")
+    new_order["customer_address"] = input("Enter customer address: ")
+    new_order["customer_phone"] = input("Enter customer phone number: ")
+    for (index, name) in enumerate(courier_file_list):
+        print(index, name, sep = " ",)
+    new_order["assigned_courier"] = int(input("Please select the index of a courier to assign to this order\n"))
+    new_order["status"] = "Preparing"
     order_list.append(new_order)
-    print(f"New order for {name_input} has been added\n")
+    print("New order has been added\n")
     orders_menu()
 
 def update_order_status():
@@ -329,12 +336,4 @@ def open_couriers():
         courier_contents = cf.read()
         print(courier_contents)
 
-
 main_menu ()
-
-
-
-
-
-
-
