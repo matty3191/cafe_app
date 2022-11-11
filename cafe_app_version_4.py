@@ -1,42 +1,91 @@
 import os
 import time
-###################################### move this into .txt to persist
-a = "apple"
-b = "coffee"
-c = "sandwich"
+import csv
 
-d = {
+###################################### move this into .txt to persist
+items_list = [{
+        "name" : "apple",
+        "price" : 0.5
+    },{
+        "name" : "coffee", 
+        "price" : 7.00
+    },{
+        "name" : "sandwich", 
+        "price" : 3.00
+    }]
+deliver_driver_names = [{
+        "name" : "Postman Patrick",
+        "phone" : "0987654345"
+    },{
+        "name" : "Ramona Flowers",
+        "numer" : "094567834578""Rocinante"
+    }]
+pre_pop_orders = [{
         "customer_name": "John",
         "customer_address": "Unit 2, 12 Main Street, London, WH1 2ER",
         "customer_phone": "0789887334",
-        "status": "preparing"
-    }
-
-e = {
+        "assign_courier":"",
+        "status": "preparing",
+        "items": ""
+    },{
         "customer_name": "Philip J. Fry",
         "customer_address": "Planet Express, West 57th Street, Manhatten New New York, United States",
         "customer_phone": "07300030001",
-        "status": "half the world away"
+        "assigne_courier":"",
+        "status": "half the world away",
+        "items" : ""
     }
+    ]
 
-f = "Postman Patrick"
-g = "Ramona Flowers"
-h = "Rocinante"
+product_list = [item for item in items_list]
+order_list = [order for order in pre_pop_orders]
+courier_list = [name for name in deliver_driver_names]
 
-product_list = []
-order_list = [] ########## do not persist this yet
-courier_list = []
+def convert_couriers_file_to_list():
+## returns a list of the .txt file specified with the \n character truncated ##
+    with open('data/couriers.csv', 'r') as cf:
+        courier_contents = cf.read().splitlines()
+        
+    return courier_contents
 
-product_list.append(a)
-product_list.append(b)
-product_list.append(c)
+def save_courier_files():
+    # opens file, uses for loop to add uodated list to file. saves and closes file.
+    with open('data/couriers.csv', 'w+') as csf:
+        for name in courier_file_list:
+            csf.write(name + "\n")
 
-order_list.append(d)
-order_list.append(e)
+def convert_products_file_to_list():
+## returns a list of the .txt file specified with the \n character truncated ##
+    with open('data/products.csv', 'r') as cf:
+        product_contents = cf.read().splitlines()
+        
+    return product_contents
 
-courier_list.append(f)
-courier_list.append(g)
-courier_list.append(h)
+def save_product_files():
+    # opens file, uses for loop to add uodated list to file. saves and closes file.
+    with open('data/products.csv', 'w+') as csf:
+        for name in product_file_list:
+            csf.write(name + "\n")
+
+def convert_orders_file_to_list():
+## returns a list of the .txt file specified with the \n character truncated ##
+    with open('data/orders.csv', 'r') as cf:
+        product_contents = cf.read().splitlines()
+        
+    return product_contents
+
+def save_orders_files():
+    # opens file, uses for loop to add uodated list to file. saves and closes file.
+    with open('data/orders.csv', 'w+') as csf:
+        for name in product_file_list:
+            csf.write(name + "\n")
+
+product_file_list = convert_products_file_to_list()
+courier_file_list = convert_couriers_file_to_list()
+order_file_list = convert_orders_file_to_list()
+
+print(product_file_list, "\n", courier_file_list, "\n", order_file_list)
+
 ######################################
 print("Howdy Partner, welcome to your custom cafe management app.\n")
 time.sleep(1)
@@ -62,6 +111,9 @@ def main_menu():
             courier_menu()        
     # persist everythin but orders then exit  
     # save data, close files
+    print("Saving data")
+    save_courier_files()
+    save_product_files()
     time.sleep(2)
     os.system('cls')
     print("Thank you for using Percival's Ugly Novel Kreation: PUNK")
@@ -96,36 +148,36 @@ Please select from the options below:\n\n
     main_menu()
 
 def view_products():
-    print(product_list)
+    print(product_file_list)
     product_menu()
 
 def create_new_product():
     # uses input to create list item. returns to p menu
     new_item = input("Please enter the name of the new product:\n")
-    product_list.append(new_item)
+    product_file_list.append(new_item)
     print(f"New item {new_item} has been added to the product list\n")
-    print(product_list)
+    print(product_file_list)
     product_menu()
 
 def update_product():
     # uses input to update list item. returns to p menu
-    for (i, item) in enumerate(product_list):
+    for (i, item) in enumerate(product_file_list):
         print(i, item, "\n")
     index_input = int((input("Please enter the index of the product you wish to update\n")))
-    print(f"You have selected {product_list[index_input]} to replace\n")
+    print(f"You have selected {product_file_list[index_input]} to replace\n")
     replace_input = input("\nPlease enter the new product you wish to replace an old product with.\n")
-    product_list[index_input] = replace_input
-    print(f"product list has been updated{product_list}\n")
+    product_file_list[index_input] = replace_input
+    print(f"product list has been updated{product_file_list}\n")
     product_menu()
 
 def delete_product():
     # uses input to delete list item. returns to p menu
-    for (i, item) in enumerate(product_list):
+    for (i, item) in enumerate(product_file_list):
         print(i, item, "\n")
     delete_input = int((input("Please enter the index of the product you wish to delete\n")))
-    print(f"You have removed {product_list[delete_input]} from the product list\n")
-    del product_list[delete_input]
-    print(product_list)
+    print(f"You have removed {product_file_list[delete_input]} from the product list\n")
+    del product_file_list[delete_input]
+    print(product_file_list)
     product_menu()
 
 ## orders menu ##
@@ -168,21 +220,17 @@ def create_new_order():
                     "customer_name":"",
                     "customer_address":"",
                     "customer_phone":"",
+                    "assigned_courier":"",
                     "status":""}
-    a = "customer_name"
-    b = "customer_address"
-    c = "customer_phone"
-    d = "status"
-    name_input = input("Enter Customer name: ")
-    address_input = input("Enter customer address: ")
-    phone_input = input("Enter customer phone number: ")
-    status_input = "Preparing"
-    new_order[a] = name_input
-    new_order[b] = address_input
-    new_order[c] = phone_input
-    new_order[d] = status_input
+    new_order["customer_name"] = input("Enter Customer name: ")
+    new_order["customer_address"] = input("Enter customer address: ")
+    new_order["customer_phone"] = input("Enter customer phone number: ")
+    for (index, name) in enumerate(courier_file_list):
+        print(index, name, sep = " ",)
+    new_order["assigned_courier"] = int(input("Please select the index of a courier to assign to this order\n"))
+    new_order["status"] = "Preparing"
     order_list.append(new_order)
-    print(f"New order for {name_input} has been added\n")
+    print("New order has been added\n")
     orders_menu()
 
 def update_order_status():
@@ -251,51 +299,41 @@ Please select from the options below:\n\n
     main_menu()
 
 def view_couriers():
-    print(courier_list)
+    print(courier_file_list)
     courier_menu()
 
 def create_new_courier():
     # uses input to create new courier. returns to c menu
     new_courier = input("Please enter the name of the new courier:\n")
-    courier_list.append(new_courier)
+    courier_file_list.append(new_courier)
     print(f"New courier, {new_courier}, has been added to the courier list\n")
-    print(courier_list)
+    print(courier_file_list)
     courier_menu()
 
 def update_courier():
     # uses input to update courier. returns to c menu
-    for (i, item) in enumerate(courier_list):
+    for (i, item) in enumerate(courier_file_list):
         print(i, item, "\n")
     index_input = int((input("Please enter the index of the courier you wish to update\n")))
-    print(f"You have selected {courier_list[index_input]} to replace\n")
+    print(f"You have selected {courier_file_list[index_input]} to replace\n")
     replace_input = input("\nPlease enter the new details of the courier.\n")
-    courier_list[index_input] = replace_input
-    print(f"Courier has been updated{courier_list}\n")
+    courier_file_list[index_input] = replace_input
+    print(f"Courier has been updated{courier_file_list}\n")
     courier_menu()
 
 def delete_courier():
     # uses input to delete courier from list. returns to c menu
-    for (i, item) in enumerate(courier_list):
+    for (i, item) in enumerate(courier_file_list):
         print(i, item, "\n")
     delete_input = int((input("Please enter the index of the courier you wish to delete\n")))
-    print(f"You have removed {courier_list[delete_input]} from the courier list\n")
-    del courier_list[delete_input]
-    print(courier_list)
+    print(f"You have removed {courier_file_list[delete_input]} from the courier list\n")
+    del courier_file_list[delete_input]
+    print(courier_file_list)
     courier_menu()
 
 def open_couriers():
     with open('data/couriers.txt', 'r') as cf:
         courier_contents = cf.read()
         print(courier_contents)
-        
-def open_products():
-    pass
 
 main_menu ()
-
-
-
-
-
-
-
