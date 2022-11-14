@@ -1,3 +1,26 @@
+import os
+import time
+from csv import DictReader
+from csv import DictWriter
+
+
+def convert_couriers_file_to_dict_list():
+    # returns a list of dicts from the .csv file specified ##
+    with open('data/couriers.csv', 'r') as cf:
+        courier_contents = DictReader(cf)
+        courier_list = list(courier_contents)
+    return courier_list
+
+def save_courier_files():
+    # opens file, uses for loop to add updated list to file. saves and closes file.
+    field_names = ['name','phone']
+    with open('data/couriers.csv', 'w' ,newline='') as csf:
+        courier_writer = DictWriter(csf, fieldnames = field_names)
+        courier_writer.writeheader()
+        for courier in courier_file_list:
+            courier_writer.writerow(dict(courier))
+
+
 ## courier menu ##
 def courier_menu():
     # displays c menu, uses input to return selected menu
@@ -33,22 +56,22 @@ def view_couriers():
 def create_new_courier():
     # uses input to create new courier. returns to c menu
     new_courier = input("Please enter the name of the new courier:\n")
+    new_courier_number = input("please enter the couriers contact number:\n")
     courier_file_list.append(new_courier)
+    courier_file_list.append(new_courier_number)
     print(f"New courier, {new_courier}, has been added to the courier list\n")
-    print(courier_file_list)
     courier_menu()
 
 def enumerate_courier_list():
-    # uses input to update courier. returns to c menu
-    for (i, item) in enumerate(courier_file_list):
-        print(i, item, "\n")
+    # loops through and enumerates courier list - does however include the headings which ill have to exclude.
+    for (iteration, item) in enumerate(courier_file_list):
+        print(iteration, item, sep = " ")
 
 def update_courier():
     enumerate_courier_list()
     index_to_update = int(input("index value of courier to update: "))
     courier_replace_key_input = input("enter name or number: ")
-    courier_replace_value_input = input("enter new info: ")
-    courier_file_list[index_to_update][courier_replace_key_input] = courier_replace_value_input
+    courier_file_list[index_to_update][courier_replace_key_input] = input("enter new info: ")
     courier_menu()
 
 def delete_courier():
@@ -59,8 +82,3 @@ def delete_courier():
     del courier_file_list[delete_input]
     print(courier_file_list)
     courier_menu()
-
-def open_couriers():
-    with open('data/couriers.txt', 'r') as cf:
-        courier_contents = cf.read()
-        print(courier_contents)

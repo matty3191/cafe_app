@@ -36,57 +36,70 @@ pre_pop_orders = [{
         "items" : ""
     }
     ]
-
+##########################################################
 product_list = [item for item in items_list]
 order_list = [order for order in pre_pop_orders]
 courier_list = [name for name in deliver_driver_names]
 
-def convert_couriers_file_to_list():
-## returns a list of the .txt file specified with the \n character truncated ##
+
+## File handling ##
+def convert_couriers_file_to_dict_list():
+    # returns a list of dicts from the .csv file specified ##
     with open('data/couriers.csv', 'r') as cf:
-        courier_contents = cf.read().splitlines()
-        
-    return courier_contents
+        courier_contents = DictReader(cf)
+        courier_list = list(courier_contents)
+    return courier_list
 
 def save_courier_files():
-    # opens file, uses for loop to add uodated list to file. saves and closes file.
-    with open('data/couriers.csv', 'w+') as csf:
-        for name in courier_file_list:
-            csf.write(name + "\n")
+    # opens file, uses for loop to add updated list to file. saves and closes file.
+    field_names = ['name','phone']
+    with open('data/couriers.csv', 'w' ,newline='') as csf:
+        courier_writer = DictWriter(csf, fieldnames = field_names)
+        courier_writer.writeheader()
+        for courier in courier_file_list:
+            courier_writer.writerow(dict(courier))
 
 def convert_products_file_to_list():
-## returns a list of the .txt file specified with the \n character truncated ##
-    with open('data/products.csv', 'r') as cf:
-        product_contents = cf.read().splitlines()
+    # returns a list of the .txt file specified with the \n character truncated ##
+    with open('data/products.csv', 'r') as pf:
+        product_contents = DictReader(pf)
+        product_list = list(product_contents)
         
-    return product_contents
+    return product_list
 
 def save_product_files():
     # opens file, uses for loop to add uodated list to file. saves and closes file.
-    with open('data/products.csv', 'w+') as csf:
-        for name in product_file_list:
-            csf.write(name + "\n")
+    field_names = ['name','price']
+    with open('data/products.csv', 'w' ,newline='') as psf:
+        product_writer = DictWriter(psf, fieldnames = field_names)
+        product_writer.writeheader()
+        for product in product_file_list:
+            product_writer.writerow(dict(product))
 
 def convert_orders_file_to_list():
-## returns a list of the .txt file specified with the \n character truncated ##
-    with open('data/orders.csv', 'r') as cf:
-        product_contents = cf.read().splitlines()
+    # returns a list of the .txt file specified with the \n character truncated ##
+    with open('data/orders.csv', 'r') as o_f:
+        order_contents = o_f = DictReader(o_f)
+        order_list = list(order_contents)
         
-    return product_contents
+    return order_list
 
 def save_orders_files():
     # opens file, uses for loop to add uodated list to file. saves and closes file.
-    with open('data/orders.csv', 'w+') as csf:
-        for name in product_file_list:
-            csf.write(name + "\n")
+    field_names = ['name','address','phone','courier','status']
+    with open('data/orders.csv', 'w' ,newline='') as osf:
+        order_writer = DictWriter(osf, fieldnames = field_names)
+        order_writer.writeheader()
+        for order in order_file_list:
+            order_writer.writerow(dict(order))
 
 product_file_list = convert_products_file_to_list()
-courier_file_list = convert_couriers_file_to_list()
+courier_file_list = convert_couriers_file_to_dict_list()
 order_file_list = convert_orders_file_to_list()
 
-print(product_file_list, "\n", courier_file_list, "\n", order_file_list)
+# print(product_file_list, "\n", courier_file_list, "\n", order_file_list)
 
-######################################
+###################################### application start ######################
 print("Howdy Partner, welcome to your custom cafe management app.\n")
 time.sleep(1)
 
@@ -180,6 +193,8 @@ def delete_product():
     print(product_file_list)
     product_menu()
 
+
+
 ## orders menu ##
 def orders_menu():
     # displays o menu, uses input to return selected menu
@@ -222,7 +237,8 @@ def create_new_order():
                     "customer_address":"",
                     "customer_phone":"",
                     "assigned_courier":"",
-                    "status":""}
+                    "status":""
+                }
     new_order["customer_name"] = input("Enter Customer name: ")
     new_order["customer_address"] = input("Enter customer address: ")
     new_order["customer_phone"] = input("Enter customer phone number: ")
@@ -242,29 +258,25 @@ def enumerate_order_list():
 def update_order_status():
     # uses user inputs to update order status
     enumerate_order_list()
-    order_list_status_update_index_input = int((input("Please enter the index of the order to update the status of\n")))
-    order_list["status"] = input("Please enter the status update i.e 'out for delivery' \n")
+    order_list[int(input("Please enter the index of the order to update the status of\n"))]["status"] = input("Please enter the status update i.e 'out for delivery' \n")
     print(f"You have succesfully updated the order to '{order_list_status_update_index_input}'")
     orders_menu()
 
 def update_order():
     # calls function to display enumerated order list
     enumerate_order_list()
-    order_list_index_input = int((input("Please enter the index of the order you wish to update\n")))
-    order_replace_key_input = input("\nPlease enter the part of the order you wish to update e.g. customer_name.\n")
-    order_replace_value_input = input("Now enter the updated information\n")
-    order_list[order_list_index_input][order_replace_key_input] = order_replace_value_input
+    order_list[int(input("Please enter the index of the order you wish to update\n"))][input("\nPlease enter the part of the order you wish to update e.g. customer_name.\n")] = input("Now enter the updated information\n")
     print(f"order list has been updated{order_list}\n")
     orders_menu()
 
 def remove_order():
-    for (iteration, item) in enumerate(order_list):
-        print(iteration, item, "\n")
-    orders_menu_delete_input = int(input("Please enter the number of the order you would like to delete from the list\n"))
-    print(f"You have selected {order_list[orders_menu_delete_input]} to delete\n")
-    del order_list[orders_menu_delete_input]
-    print("The updated order list is as follows:\n", order_list)
+    enumerate_order_list()
+    del order_list[int(input("Please enter the number of the order you would like to delete from the list:\n"))]
+    print("Order succesfully deleted\n")
     orders_menu()
+
+
+
 
 ## courier menu ##
 def courier_menu():
@@ -300,36 +312,26 @@ def view_couriers():
 
 def create_new_courier():
     # uses input to create new courier. returns to c menu
-    new_courier = input("Please enter the name of the new courier:\n")
-    courier_file_list.append(new_courier)
-    print(f"New courier, {new_courier}, has been added to the courier list\n")
-    print(courier_file_list)
+    courier_file_list.append({'name':input("Please enter the name of the new courier:\n"), 'phone':input("please enter the couriers contact number:\n")})
+    print(f"New courier has been added to the courier list\n")
     courier_menu()
 
 def enumerate_courier_list():
-    # uses input to update courier. returns to c menu
-    for (i, item) in enumerate(courier_file_list):
-        print(i, item, "\n")
+    # loops through and enumerates courier list - does however include the headings which ill have to exclude.
+    for (iteration, item) in enumerate(courier_file_list):
+        print(iteration, item, sep = " ")
 
 def update_courier():
+    # uses 3 separate inputs to navigate to a key value in a list and replaces the value with the input
     enumerate_courier_list()
-    index_to_update = int(input("index value of courier to update: "))
-    courier_replace_key_input = input("enter name or number: ")
-    courier_file_list[index_to_update][courier_replace_key_input] = input("enter new info: ")
+    courier_file_list[int(input("index value of courier to update: "))][input("enter name or number: ")] = input("enter new info: ")
     courier_menu()
 
 def delete_courier():
     # uses input to delete courier from list. returns to c menu
     enumerate_courier_list()
-    delete_input = int((input("Please enter the index of the courier you wish to delete\n")))
-    print(f"You have removed {courier_file_list[delete_input]} from the courier list\n")
-    del courier_file_list[delete_input]
-    print(courier_file_list)
+    del courier_file_list[int(input("Please enter the index of the courier you wish to delete\n"))]
     courier_menu()
 
-def open_couriers():
-    with open('data/couriers.txt', 'r') as cf:
-        courier_contents = cf.read()
-        print(courier_contents)
 
 main_menu ()
