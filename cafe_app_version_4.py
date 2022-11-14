@@ -1,7 +1,7 @@
 import os
 import time
-import csv
-
+from csv import DictReader
+from csv import DictWriter
 ###################################### move this into .txt to persist
 items_list = [{
         "name" : "apple",
@@ -183,7 +183,7 @@ def delete_product():
 ## orders menu ##
 def orders_menu():
     # displays o menu, uses input to return selected menu
-    o_command = int(input("""
+    order_command = int(input("""
 Orders menu:\n
 0) Exit to main menu.\n
 1) View list of orders.\n
@@ -191,26 +191,27 @@ Orders menu:\n
 3) Update order status.\n
 4) Update existing order.\n
 5) Remove existing order.\n"""))
-    while o_command != 0:
-        if o_command >5 or o_command <0:
+    while order_command != 0:
+        if order_command >5 or order_command <0:
             print("Error")
             time.sleep(2)
             orders_menu()
-        if o_command == 1:
+        if order_command == 1:
             view_orders()
-        if o_command == 2:
+        if order_command == 2:
             create_new_order()
-        if o_command == 3:
+        if order_command == 3:
             update_order_status()
-        if o_command == 4:
+        if order_command == 4:
             update_product()
-        if o_command == 5:
+        if order_command == 5:
             delete_product()
             
     print("Exiting to main menu")
     main_menu()
 
 def view_orders():
+    # prints the orders list
     print(*order_list, sep = "\n")
     orders_menu()
 
@@ -233,31 +234,26 @@ def create_new_order():
     print("New order has been added\n")
     orders_menu()
 
-def update_order_status():
+def enumerate_order_list():
+    # enumerates and prints orders list
     for (iteration, item) in enumerate(order_list):
         print(iteration, item, sep = " ")
-    order_list_update_index_input = int((input("Please enter the index of the order to update the status of\n")))
-    print(f"You have selected {order_list[order_list_update_index_input]} to update\n")
-    to_update_status_dict = {}
-    to_update_status_dict.update(order_list[order_list_update_index_input])
-    status_update_input = input("Please enter the status update i.e 'out for delivery' \n")
-    to_update_status_dict["status"] = status_update_input
-    order_list[order_list_update_index_input] = to_update_status_dict
-    print(f"You have succesfully updated the order to '{status_update_input}'")
-    print(order_list[order_list_update_index_input])
+
+def update_order_status():
+    # uses user inputs to update order status
+    enumerate_order_list()
+    order_list_status_update_index_input = int((input("Please enter the index of the order to update the status of\n")))
+    order_list["status"] = input("Please enter the status update i.e 'out for delivery' \n")
+    print(f"You have succesfully updated the order to '{order_list_status_update_index_input}'")
     orders_menu()
 
 def update_order():
-    for (iteration, item) in enumerate(order_list):
-        print(iteration, item, sep = " ")
+    # calls function to display enumerated order list
+    enumerate_order_list()
     order_list_index_input = int((input("Please enter the index of the order you wish to update\n")))
-    print(f"You have selected {order_list[order_list_index_input]} to update\n")
-    to_update_dictionary = {}
-    to_update_dictionary.update(order_list[order_list_index_input])
     order_replace_key_input = input("\nPlease enter the part of the order you wish to update e.g. customer_name.\n")
     order_replace_value_input = input("Now enter the updated information\n")
-    to_update_dictionary[order_replace_key_input] = order_replace_value_input
-    order_list[order_list_index_input] = to_update_dictionary
+    order_list[order_list_index_input][order_replace_key_input] = order_replace_value_input
     print(f"order list has been updated{order_list}\n")
     orders_menu()
 
@@ -299,7 +295,7 @@ Please select from the options below:\n\n
     main_menu()
 
 def view_couriers():
-    print(courier_file_list)
+    enumerate_courier_list()
     courier_menu()
 
 def create_new_courier():
@@ -310,21 +306,21 @@ def create_new_courier():
     print(courier_file_list)
     courier_menu()
 
-def update_courier():
+def enumerate_courier_list():
     # uses input to update courier. returns to c menu
     for (i, item) in enumerate(courier_file_list):
         print(i, item, "\n")
-    index_input = int((input("Please enter the index of the courier you wish to update\n")))
-    print(f"You have selected {courier_file_list[index_input]} to replace\n")
-    replace_input = input("\nPlease enter the new details of the courier.\n")
-    courier_file_list[index_input] = replace_input
-    print(f"Courier has been updated{courier_file_list}\n")
+
+def update_courier():
+    enumerate_courier_list()
+    index_to_update = int(input("index value of courier to update: "))
+    courier_replace_key_input = input("enter name or number: ")
+    courier_file_list[index_to_update][courier_replace_key_input] = input("enter new info: ")
     courier_menu()
 
 def delete_courier():
     # uses input to delete courier from list. returns to c menu
-    for (i, item) in enumerate(courier_file_list):
-        print(i, item, "\n")
+    enumerate_courier_list()
     delete_input = int((input("Please enter the index of the courier you wish to delete\n")))
     print(f"You have removed {courier_file_list[delete_input]} from the courier list\n")
     del courier_file_list[delete_input]
