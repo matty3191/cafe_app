@@ -2,44 +2,10 @@ import os
 import time
 from csv import DictReader
 from csv import DictWriter
-###################################### move this into .txt to persist
-items_list = [{
-        "name" : "apple",
-        "price" : 0.5
-    },{
-        "name" : "coffee", 
-        "price" : 7.00
-    },{
-        "name" : "sandwich", 
-        "price" : 3.00
-    }]
-deliver_driver_names = [{
-        "name" : "Postman Patrick",
-        "phone" : "0987654345"
-    },{
-        "name" : "Ramona Flowers",
-        "numer" : "094567834578""Rocinante"
-    }]
-pre_pop_orders = [{
-        "customer_name": "John",
-        "customer_address": "Unit 2, 12 Main Street, London, WH1 2ER",
-        "customer_phone": "0789887334",
-        "assign_courier":"",
-        "status": "preparing",
-        "items": ""
-    },{
-        "customer_name": "Philip J. Fry",
-        "customer_address": "Planet Express, West 57th Street, Manhatten New New York, United States",
-        "customer_phone": "07300030001",
-        "assigne_courier":"",
-        "status": "half the world away",
-        "items" : ""
-    }
-    ]
-##########################################################
-product_list = [item for item in items_list]
-order_list = [order for order in pre_pop_orders]
-courier_list = [name for name in deliver_driver_names]
+
+# product_list = []
+# order_list = []
+# courier_list = []
 
 ## File handling ##
 def convert_couriers_file_to_dict_list():
@@ -96,7 +62,7 @@ product_file_list = convert_products_file_to_list()
 courier_file_list = convert_couriers_file_to_dict_list()
 order_file_list = convert_orders_file_to_list()
 
-###################################### application start ######################
+###################################### application start ##############################################
 print("Howdy Partner, welcome to your custom cafe management app.\n")
 time.sleep(1)
 
@@ -162,12 +128,12 @@ def enumerate_products():
         print(i, item, "\n")
 
 def view_products():
-    print(product_file_list)
+    enumerate_products()
     product_menu()
 
 def create_new_product():
     # uses input to create list item. returns to p menu
-    product_file_list.append(input("Please enter the name of the new product:\n"))
+    product_file_list.append({'name':input("Please enter the name of the new product:\n"), 'price':input("please enter the price of the product\n")})
     print("New item has been added to the product list\n")
     print(product_file_list)
     product_menu()
@@ -175,14 +141,14 @@ def create_new_product():
 def update_product():
     # uses input to update list item. returns to p menu
     enumerate_products()
-    product_file_list[int((input("Please enter the index of the product you wish to update\n")))] = input("\nPlease enter the new product you wish to replace an old product with.\n")
-    print(f"product list has been updated\n{product_file_list}\n")
+    product_file_list[int(input("Please enter the index of the product you wish to update\n"))][input("Enter either name or price\n")] = input("\nPlease enter the new information.\n")
+    print(f"product list has been updated\n")
     product_menu()
 
 def delete_product():
     # uses input to delete list item. returns to p menu
     enumerate_products()
-    del product_file_list[int((input("Please enter the index of the product you wish to delete\n")))]
+    del product_file_list[int(input("Please enter the index of the product you wish to delete\n"))]
     print(f"Product removed from list\n{product_file_list}\n")
     product_menu()
 
@@ -209,16 +175,16 @@ Orders menu:\n
         if order_command == 3:
             update_order_status()
         if order_command == 4:
-            update_product()
+            update_order()
         if order_command == 5:
-            delete_product()
+            delete_order()
             
     print("Exiting to main menu")
     main_menu()
 
 def view_orders():
     # prints the orders list
-    print(*order_list, sep = "\n")
+    enumerate_order_list()
     orders_menu()
 
 def create_new_order():
@@ -237,32 +203,32 @@ def create_new_order():
         print(index, name, sep = " ",)
     new_order["assigned_courier"] = int(input("Please select the index of a courier to assign to this order\n"))
     new_order["status"] = "Preparing"
-    order_list.append(new_order)
+    order_file_list.append(new_order)
     print("New order has been added\n")
     orders_menu()
 
 def enumerate_order_list():
     # enumerates and prints orders list
-    for (iteration, item) in enumerate(order_list):
+    for (iteration, item) in enumerate(order_file_list):
         print(iteration, item, sep = " ")
 
 def update_order_status():
     # uses user inputs to update order status
     enumerate_order_list()
-    order_list[int(input("Please enter the index of the order to update the status of\n"))]["status"] = input("Please enter the status update i.e 'out for delivery' \n")
+    order_file_list[int(input("Please enter the index of the order to update the status of\n"))]["status"] = input("Please enter the status update i.e 'out for delivery' \n")
     print(f"You have succesfully updated the order status")
     orders_menu()
 
 def update_order():
     # calls function to display enumerated order list
     enumerate_order_list()
-    order_list[int(input("Enter the index of the order you wish to update\n"))][input("\nNow Enter the part of the order you wish to update e.g. customer_name.\n")] = input("Enter the updated information\n")
-    print(f"order list has been updated{order_list}\n")
+    order_file_list[int(input("Enter the index of the order you wish to update\n"))][input("\nNow Enter the part of the order you wish to update e.g. customer_name.\n")] = input("Enter the updated information\n")
+    print(f"order list has been updated{order_file_list}\n")
     orders_menu()
 
-def remove_order():
+def delete_order():
     enumerate_order_list()
-    del order_list[int(input("Please enter the number of the order you would like to delete from the list:\n"))]
+    del order_file_list[int(input("Please enter the number of the order you would like to delete from the list:\n"))]
     print("Order succesfully deleted\n")
     orders_menu()
 
@@ -312,7 +278,7 @@ def enumerate_courier_list():
 def update_courier():
     # uses 3 separate inputs to navigate to a key value in a list and replaces the value with the input
     enumerate_courier_list()
-    courier_file_list[int(input("index value of courier to update: "))][input("enter name or number: ")] = input("enter new info: ")
+    courier_file_list[int(input("Index value of courier to update: "))][input("Enter name or phone: ")] = input("Enter new information: ")
     courier_menu()
 
 def delete_courier():
