@@ -1,3 +1,3 @@
-customer_name,customer_address,customer_phone,assigne_courier,status
-Philip J. Fry,Planet Express West 57th Street Manhatten New New York United States,07300030001,half the world away,preparing
-James montgomery,123 left at the fork rotheram,098765456789,preparing
+customer_name,customer_address,customer_phone,assigned_courier,status
+Philip J. Fry,Planet Express West 57th Street Manhatten New New York United States,07300030001,,preparing
+James montgomery,123 left at the fork rotheram,098765456789,,preparing

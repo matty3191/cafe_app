@@ -3,27 +3,7 @@ import time
 from csv import DictReader
 from csv import DictWriter
 
-# product_list = []
-# order_list = []
-# courier_list = []
-
 ## File handling ##
-def convert_couriers_file_to_dict_list():
-    # returns a list of dicts from the .csv file specified ##
-    with open('data/couriers.csv', 'r') as cf:
-        courier_contents = DictReader(cf)
-        courier_list = list(courier_contents)
-    return courier_list
-
-def save_courier_files():
-    # opens file, uses for loop to add updated list to file. saves and closes file.
-    field_names = ['name','phone']
-    with open('data/couriers.csv', 'w' ,newline='') as csf:
-        courier_writer = DictWriter(csf, fieldnames = field_names)
-        courier_writer.writeheader()
-        for courier in courier_file_list:
-            courier_writer.writerow(dict(courier))
-
 def convert_products_file_to_list():
     # returns a list of the .txt file specified with the \n character truncated ##
     with open('data/products.csv', 'r') as pf:
@@ -41,8 +21,24 @@ def save_product_files():
         for product in product_file_list:
             product_writer.writerow(dict(product))
 
+def convert_couriers_file_to_dict_list():
+    # returns a list of dicts from the .csv file specified ##
+    with open('data/couriers.csv', 'r') as cf:
+        courier_contents = DictReader(cf)
+        courier_list = list(courier_contents)
+    return courier_list
+
+def save_courier_files():
+    # opens file, uses for loop to add updated list to file. saves and closes file.
+    field_names = ['name','phone']
+    with open('data/couriers.csv', 'w' ,newline='') as csf:
+        courier_writer = DictWriter(csf, fieldnames = field_names)
+        courier_writer.writeheader()
+        for courier in courier_file_list:
+            courier_writer.writerow(dict(courier))
+
 def convert_orders_file_to_list():
-    # returns a list of the .txt file specified with the \n character truncated ##
+    # returns a list of the .txt file specified with the \n character truncated
     with open('data/orders.csv', 'r') as o_f:
         order_contents = o_f = DictReader(o_f)
         order_list = list(order_contents)
@@ -61,7 +57,7 @@ def save_orders_files():
 product_file_list = convert_products_file_to_list()
 courier_file_list = convert_couriers_file_to_dict_list()
 order_file_list = convert_orders_file_to_list()
-
+order_status_list = ["preparing", "out for delivery", "delivered"]
 ###################################### application start ##############################################
 print("Howdy Partner, welcome to your custom cafe management app.\n")
 time.sleep(1)
@@ -72,8 +68,8 @@ def main_menu():
     command = int(input("""Please type the number for the menu option below\n\n
 0) Exit.\n
 1) Product menu.\n
-2) Orders menu.\n
-3) Courier menu\n"""))
+2) Courier menu.\n
+3) Orders menu\n"""))
     while command != 0:
         if command >3 or command <0:
             print("Error")
@@ -82,9 +78,9 @@ def main_menu():
         if command == 1:
             product_menu()
         if command == 2:
-            orders_menu()
+            courier_menu()
         if command == 3:
-            courier_menu()        
+            orders_menu()        
     # persist everythin but orders then exit  
     # save data, close files
     print("Saving data")
@@ -152,6 +148,61 @@ def delete_product():
     print(f"Product removed from list\n{product_file_list}\n")
     product_menu()
 
+## courier menu ##
+def courier_menu():
+    # displays c menu, uses input to return selected menu
+    c_command = int(input("""
+Courier Menu:\n
+Please select from the options below:\n\n
+0) Exit.\n
+1) Courier list.\n
+2) Create new courier.\n
+3) Update exsiting courier.\n
+4) Remove courier.\n"""))
+    while c_command != 0:
+        if c_command >4 or c_command <0:
+            print("Error")
+            time.sleep(2)
+            courier_menu()
+        if c_command == 1:
+            view_couriers()
+        if c_command == 2:
+            create_new_courier()
+        if c_command == 3:
+            update_courier()
+        if c_command == 4:
+            delete_courier()
+            
+    print("Exiting to main menu")
+    main_menu()
+
+def view_couriers():
+    enumerate_courier_list()
+    courier_menu()
+
+def create_new_courier():
+    # uses input to create new courier. returns to c menu
+    courier_file_list.append({'name':input("Please enter the name of the new courier:\n"), 'phone':input("please enter the couriers contact number:\n")})
+    print(f"New courier has been added to the courier list\n")
+    courier_menu()
+
+def enumerate_courier_list():
+    # loops through and enumerates courier list - does however include the headings which ill have to exclude.
+    for (iteration, item) in enumerate(courier_file_list):
+        print(iteration, item, sep = " ")
+
+def update_courier():
+    # uses 3 separate inputs to navigate to a key value in a list and replaces the value with the input
+    enumerate_courier_list()
+    courier_file_list[int(input("Index value of courier to update: "))][input("Enter name or phone: ")] = input("Enter new information: ")
+    courier_menu()
+
+def delete_courier():
+    # uses input to delete courier from list. returns to c menu
+    enumerate_courier_list()
+    del courier_file_list[int(input("Please enter the index of the courier you wish to delete\n"))]
+    courier_menu()
+
 ## orders menu ##
 def orders_menu():
     # displays o menu, uses input to return selected menu
@@ -215,14 +266,15 @@ def enumerate_order_list():
 def update_order_status():
     # uses user inputs to update order status
     enumerate_order_list()
-    order_file_list[int(input("Please enter the index of the order to update the status of\n"))]["status"] = input("Please enter the status update i.e 'out for delivery' \n")
+    print(order_status_list, "\n", )
+    order_file_list[int(input("Please enter the index of the order to update the status of\n"))]["status"] = order_status_list (int(input("Choose the index of the new order status:\n")))
     print(f"You have succesfully updated the order status")
     orders_menu()
 
 def update_order():
     # calls function to display enumerated order list
     enumerate_order_list()
-    order_file_list[int(input("Enter the index of the order you wish to update\n"))][input("\nNow Enter the part of the order you wish to update e.g. customer_name.\n")] = input("Enter the updated information\n")
+    order_file_list[int(input("Enter the index of the order you wish to update\n"))][input("\nEnter the part of the order you wish to update e.g. customer_name.\n")] = input("Enter the updated information\n")
     print(f"order list has been updated{order_file_list}\n")
     orders_menu()
 
@@ -231,60 +283,5 @@ def delete_order():
     del order_file_list[int(input("Please enter the number of the order you would like to delete from the list:\n"))]
     print("Order succesfully deleted\n")
     orders_menu()
-
-## courier menu ##
-def courier_menu():
-    # displays c menu, uses input to return selected menu
-    c_command = int(input("""
-Courier Menu:\n
-Please select from the options below:\n\n
-0) Exit.\n
-1) Courier list.\n
-2) Create new courier.\n
-3) Update exsiting courier.\n
-4) Remove courier.\n"""))
-    while c_command != 0:
-        if c_command >4 or c_command <0:
-            print("Error")
-            time.sleep(2)
-            courier_menu()
-        if c_command == 1:
-            view_couriers()
-        if c_command == 2:
-            create_new_courier()
-        if c_command == 3:
-            update_courier()
-        if c_command == 4:
-            delete_courier()
-            
-    print("Exiting to main menu")
-    main_menu()
-
-def view_couriers():
-    enumerate_courier_list()
-    courier_menu()
-
-def create_new_courier():
-    # uses input to create new courier. returns to c menu
-    courier_file_list.append({'name':input("Please enter the name of the new courier:\n"), 'phone':input("please enter the couriers contact number:\n")})
-    print(f"New courier has been added to the courier list\n")
-    courier_menu()
-
-def enumerate_courier_list():
-    # loops through and enumerates courier list - does however include the headings which ill have to exclude.
-    for (iteration, item) in enumerate(courier_file_list):
-        print(iteration, item, sep = " ")
-
-def update_courier():
-    # uses 3 separate inputs to navigate to a key value in a list and replaces the value with the input
-    enumerate_courier_list()
-    courier_file_list[int(input("Index value of courier to update: "))][input("Enter name or phone: ")] = input("Enter new information: ")
-    courier_menu()
-
-def delete_courier():
-    # uses input to delete courier from list. returns to c menu
-    enumerate_courier_list()
-    del courier_file_list[int(input("Please enter the index of the courier you wish to delete\n"))]
-    courier_menu()
 
 main_menu ()
