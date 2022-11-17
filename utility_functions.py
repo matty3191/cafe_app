@@ -55,3 +55,5 @@ def save_orders_files():
 product_list_of_dicts = convert_products_file_to_list()
 courier_list_of_dicts = convert_couriers_file_to_dict_list()
 order_list_of_dicts = convert_orders_file_to_list()
+
+# print(courier_list_of_dicts)

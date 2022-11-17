@@ -12,8 +12,13 @@ New to version 4:
 - written unit tests
 - broken down functions
 
+Overview
+Your client has launched a pop-up café in a busy business district. They
+are offering home-made lunches and refreshments to the surrounding
+offices. As such, they require a software application which helps them to
+log and track orders.
 
-Project Brief:
+Week 4 Brief:
 
 Now that we’ve learned how to work with two-dimensional data, let’s refactor
 our app to use dictionaries for both product and courier.
@@ -34,5 +39,6 @@ As a user I want to:
 • BONUS list orders by status or courier
 
 - How did you design meet the requirements?
-- 
-- 
+- How did you guarantee the project requirements?
+- If you had more time, what is one thing you would improve on?
+- what did you most enjoy about implementing the project?

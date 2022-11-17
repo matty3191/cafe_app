@@ -1,10 +1,10 @@
 import os
 import time
-from couriers_crud_functions import delete_courier, enumerate_courier_list, update_courier
+from couriers_crud_functions import create_new_courier, delete_courier, update_courier
 
 from orders_crud_functions import (create_new_order, delete_order,
                                    update_order, update_order_status)
-from user_interface_layer import enumerate_order_list, enumerate_order_status_list,
+from user_interface_layer import courier_menu_interface, enumerate_courier_list, enumerate_order_list, enumerate_order_status_list, order_menu_interface
 from utility_functions import (courier_list_of_dicts, order_list_of_dicts,
                                product_list_of_dicts, save_courier_files,
                                save_product_files)
@@ -104,15 +104,8 @@ def delete_product():
 
 ## courier menu ##
 def courier_menu():
-    # displays c menu, uses input to return selected menu
-    c_command = int(input("""
-Courier Menu:\n
-Please select from the options below:\n\n
-0) Exit.\n
-1) Courier list.\n
-2) Create new courier.\n
-3) Update exsiting courier.\n
-4) Remove courier.\n"""))
+    courier_menu_interface()
+    c_command = int(input("\nEnter number to navigate menu: \n"))
     while c_command != 0:
         if c_command >4 or c_command <0:
             print("Error")
@@ -122,20 +115,22 @@ Please select from the options below:\n\n
             enumerate_courier_list(courier_list_of_dicts)
             courier_menu()
         if c_command == 2:
-            input("Please enter the name of the new courier:\n")
-            input("please enter the couriers contact number:\n")
-            create_new_courier()
+            new_courier_name = input("Please enter the name of the new courier:\n")
+            new_courier_phone = input("please enter the couriers contact number:\n")
+            create_new_courier(courier_list_of_dicts, new_courier_name, new_courier_phone)
+            print("New courier succesfully added")
+            courier_menu()
         if c_command == 3:
             enumerate_courier_list(courier_list_of_dicts)
             update_courier_index = int(input("Index value of courier to update: \n"))
             name_or_phone = input("Enter name or phone: \n")
             new_courier_information = input("Enter new information: ")
-            update_courier(update_courier_index, name_or_phone, new_courier_information)
+            update_courier(courier_list_of_dicts, update_courier_index, name_or_phone, new_courier_information)
             courier_menu()
         if c_command == 4:
-            enumerate_courier_list()
+            enumerate_courier_list(courier_list_of_dicts)
             delete_index_value = int(input("Please enter the index of the courier you wish to delete\n"))
-            delete_courier(delete_index_value)
+            delete_courier(courier_list_of_dicts, delete_index_value)
             courier_menu()
             
     print("Exiting to main menu")
@@ -144,16 +139,8 @@ Please select from the options below:\n\n
 
 ## orders menu ##
 def orders_menu():
-    # displays o menu, uses input to return selected menu
-    #TODO consider making this part of the user interface layer as its own function
-    order_command = int(input(""" 
-Orders menu:\n
-0) Exit to main menu.\n
-1) View list of orders.\n
-2) Create a new order.\n
-3) Update order status.\n
-4) Update existing order.\n
-5) Remove existing order.\n"""))
+    order_menu_interface()
+    order_command = int(input("\nEnter number to navigate menu: \n"))
     while order_command != 0:
         if order_command >5 or order_command <0:
             print("Error")
