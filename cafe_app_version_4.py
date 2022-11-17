@@ -1,9 +1,10 @@
 import os
 import time
+from couriers_crud_functions import delete_courier, enumerate_courier_list, update_courier
 
 from orders_crud_functions import (create_new_order, delete_order,
                                    update_order, update_order_status)
-from orders_user_interface_layer import enumerate_order_list, view_orders
+from user_interface_layer import enumerate_order_list, enumerate_order_status_list,
 from utility_functions import (courier_list_of_dicts, order_list_of_dicts,
                                product_list_of_dicts, save_courier_files,
                                save_product_files)
@@ -99,6 +100,8 @@ def delete_product():
     print(f"Product removed from list\n{product_list_of_dicts}\n")
     product_menu()
 
+
+
 ## courier menu ##
 def courier_menu():
     # displays c menu, uses input to return selected menu
@@ -116,48 +119,34 @@ Please select from the options below:\n\n
             time.sleep(2)
             courier_menu()
         if c_command == 1:
-            view_couriers()
+            enumerate_courier_list(courier_list_of_dicts)
+            courier_menu()
         if c_command == 2:
+            input("Please enter the name of the new courier:\n")
+            input("please enter the couriers contact number:\n")
             create_new_courier()
         if c_command == 3:
-            update_courier()
+            enumerate_courier_list(courier_list_of_dicts)
+            update_courier_index = int(input("Index value of courier to update: \n"))
+            name_or_phone = input("Enter name or phone: \n")
+            new_courier_information = input("Enter new information: ")
+            update_courier(update_courier_index, name_or_phone, new_courier_information)
+            courier_menu()
         if c_command == 4:
-            delete_courier()
+            enumerate_courier_list()
+            delete_index_value = int(input("Please enter the index of the courier you wish to delete\n"))
+            delete_courier(delete_index_value)
+            courier_menu()
             
     print("Exiting to main menu")
     main_menu()
 
-def view_couriers():
-    enumerate_courier_list()
-    courier_menu()
-
-def create_new_courier():
-    # uses input to create new courier. returns to c menu
-    courier_list_of_dicts.append({'name':input("Please enter the name of the new courier:\n"), 'phone':input("please enter the couriers contact number:\n")})
-    print(f"New courier has been added to the courier list\n")
-    courier_menu()
-
-def enumerate_courier_list():
-    # loops through and enumerates courier list - does however include the headings which ill have to exclude.
-    for (iteration, item) in enumerate(courier_list_of_dicts):
-        print(iteration, item, sep = " ")
-
-def update_courier():
-    # uses 3 separate inputs to navigate to a key value in a list and replaces the value with the input
-    enumerate_courier_list()
-    courier_list_of_dicts[int(input("Index value of courier to update: "))][input("Enter name or phone: ")] = input("Enter new information: ")
-    courier_menu()
-
-def delete_courier():
-    # uses input to delete courier from list. returns to c menu
-    enumerate_courier_list()
-    del courier_list_of_dicts[int(input("Please enter the index of the courier you wish to delete\n"))]
-    courier_menu()
 
 ## orders menu ##
 def orders_menu():
     # displays o menu, uses input to return selected menu
-    order_command = int(input("""
+    #TODO consider making this part of the user interface layer as its own function
+    order_command = int(input(""" 
 Orders menu:\n
 0) Exit to main menu.\n
 1) View list of orders.\n
@@ -170,12 +159,35 @@ Orders menu:\n
             print("Error")
             time.sleep(2)
             orders_menu()
-        if order_command == 1:
-            view_orders(orders_menu, order_list_of_dicts)
+        if order_command == 1: #TODO narrow down functions from CRUD / user interface layer
+            enumerate_order_list(order_list_of_dicts)
+            orders_menu()
         if order_command == 2:
-            create_new_order(order_list_of_dicts, courier_list_of_dicts, orders_menu)
+            print("Create New Order")
+            new_order = {
+                "customer_name":"",
+                "customer_address":"",
+                "customer_phone":"",
+                "assigned_courier":"",
+                "status":""
+            }
+            new_order["customer_name"] = input("Enter Customer name: ")
+            new_order["customer_address"] = input("Enter customer address: ")
+            new_order["customer_phone"] = input("Enter customer phone number: ")
+            enumerate_courier_list()
+            new_order["assigned_courier"] = int(input("Please select the index of a courier to assign to this order\n"))
+            new_order["status"] = "Preparing"
+            create_new_order(order_list_of_dicts, new_order)
+            print("New order has been added\n")
+            orders_menu()
         if order_command == 3:
-            update_order_status(enumerate_order_list, order_status_list, orders_menu)
+            enumerate_order_list(order_list_of_dicts)
+            order_status_index_update = int(input("Please enter the index of the order to update the status of\n"))
+            enumerate_order_status_list(order_status_list)
+            new_order_status_value = order_status_list[int(input("Choose the index of the new order status:\n"))]
+            update_order_status(order_list_of_dicts, order_status_index_update, new_order_status_value)
+            print(f"You have succesfully updated the order status")
+            orders_menu()
         if order_command == 4:
             enumerate_order_list(order_list_of_dicts)
             order_index = int(input("Enter the index of the order you wish to update\n"))
@@ -184,10 +196,12 @@ Orders menu:\n
             update_order(order_list_of_dicts, order_index, order_key, new_order_value)
             print(f"order list has been updated{order_list_of_dicts}\n")
             orders_menu()
-
         if order_command == 5:
-            delete_order()
-            
+            enumerate_order_list(order_list_of_dicts, delete_order_index)
+            delete_order_index = int(input("Please enter the number of the order you would like to delete from the list:\n"))
+            delete_order(order_list_of_dicts)
+            print("Order succesfully deleted\n")
+            orders_menu()
     print("Exiting to main menu")
     main_menu()
 

@@ -1,4 +1,4 @@
-from orders import update_order
+from orders_crud_functions import update_order
 
 def test_update_order():
 
