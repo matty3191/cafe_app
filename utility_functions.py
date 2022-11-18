@@ -3,7 +3,6 @@ from csv import DictWriter
 
 ## File handling ##
 def convert_products_file_to_list():
-    # returns a list of the .txt file specified with the \n character truncated ##
     with open('data/products.csv', 'r') as pf:
         product_contents = DictReader(pf)
         product_list = list(product_contents)
@@ -11,7 +10,6 @@ def convert_products_file_to_list():
     return product_list
 
 def save_product_files():
-    # opens file, uses for loop to add uodated list to file. saves and closes file.
     field_names = ['name','price']
     with open('data/products.csv', 'w' ,newline='') as psf:
         product_writer = DictWriter(psf, fieldnames = field_names)
@@ -20,14 +18,12 @@ def save_product_files():
             product_writer.writerow(dict(product))
 
 def convert_couriers_file_to_dict_list():
-    # returns a list of dicts from the .csv file specified ##
     with open('data/couriers.csv', 'r') as cf:
         courier_contents = DictReader(cf)
         courier_list = list(courier_contents)
     return courier_list
 
 def save_courier_files():
-    # opens file, uses for loop to add updated list to file. saves and closes file.
     field_names = ['name','phone']
     with open('data/couriers.csv', 'w' ,newline='') as csf:
         courier_writer = DictWriter(csf, fieldnames = field_names)
@@ -36,7 +32,6 @@ def save_courier_files():
             courier_writer.writerow(dict(courier))
 
 def convert_orders_file_to_list():
-    # returns a list of the .txt file specified with the \n character truncated
     with open('data/orders.csv', 'r') as o_f:
         order_contents = o_f = DictReader(o_f)
         order_list = list(order_contents)
@@ -44,8 +39,7 @@ def convert_orders_file_to_list():
     return order_list
 
 def save_orders_files():
-    # opens file, uses for loop to add uodated list to file. saves and closes file.
-    field_names = ['name','address','phone','courier','status']
+    field_names = ['customer_name','customer_address','customer_phone','assigned_courier','status','items']
     with open('data/orders.csv', 'w' ,newline='') as osf:
         order_writer = DictWriter(osf, fieldnames = field_names)
         order_writer.writeheader()
@@ -55,5 +49,3 @@ def save_orders_files():
 product_list_of_dicts = convert_products_file_to_list()
 courier_list_of_dicts = convert_couriers_file_to_dict_list()
 order_list_of_dicts = convert_orders_file_to_list()
-
-# print(courier_list_of_dicts)
