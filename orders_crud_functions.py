@@ -6,9 +6,6 @@ def update_order_status(order_list_of_dicts, order_status_index_update, new_orde
 
 def update_order(order_list_of_dicts, order_index, order_key, new_order_value):
     order_list_of_dicts[order_index][order_key] = new_order_value
-# TODO iterate through the new_order_value and if blank do not update
-
-
 
 def delete_order(order_list_of_dicts, delete_order_index):
     del order_list_of_dicts[delete_order_index]

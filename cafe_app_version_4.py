@@ -1,14 +1,19 @@
 import os
 import time
-from couriers_crud_functions import create_new_courier, delete_courier, update_courier
 
+from couriers_crud_functions import create_new_courier, delete_courier, update_courier
 from orders_crud_functions import create_new_order, delete_order, update_order, update_order_status
 from products_crud_functions import create_new_product, delete_product, update_product
-from user_interface_layer import courier_menu_interface, enumerate_courier_list, enumerate_order_list, enumerate_order_status_list, enumerate_organise_orders_by_list, enumerate_products_list, main_menu_options, order_menu_interface
-from utility_functions import courier_list_of_dicts, order_list_of_dicts, product_list_of_dicts, save_courier_files,save_product_files
+from user_interface_layer import (
+                                courier_menu_interface, enumerate_courier_list, enumerate_order_list, 
+                                enumerate_order_status_list, enumerate_products_list, main_menu_options, 
+                                order_menu_interface, products_menu
+                                )
+from utility_functions import (courier_list_of_dicts, order_list_of_dicts, product_list_of_dicts, 
+                                save_courier_files, save_orders_files,save_product_files
+                            )
 
 order_status_list = ["preparing", "out for delivery", "delivered"]
-organise_orders_by_list = ["View all orders", "Orders matching a courier", "Orders matching an order status"]
 ###################################### application start ##############################################
 print("Howdy Partner, welcome to your custom cafe management app.\n")
 time.sleep(1)
@@ -31,6 +36,7 @@ def main_menu():
     print("Saving data")
     save_courier_files()
     save_product_files()
+    save_orders_files()
     time.sleep(2)
     os.system('cls')
     print("Thank you for using Percival's Ugly Novel Kreation: PUNK")
@@ -38,6 +44,7 @@ def main_menu():
 
 ## Product menu ##
 def product_menu():
+    products_menu()
     p_command = int(input('\nEnter number to navigate menu: \n'))
     while p_command != 0:
         if p_command >4 or p_command <0:
@@ -110,7 +117,7 @@ def courier_menu():
 ## orders menu ##
 def orders_menu():
     order_menu_interface()
-    order_command = int(input("\nEnter number to navigate menu: \n"))
+    order_command = int(input("\nEnter number to navigate menu:\n"))
     while order_command != 0:
         if order_command >5 or order_command <0:
             print("\nError: Enter a valid command: \n")
@@ -132,7 +139,7 @@ def orders_menu():
             new_order["customer_name"] = input("Enter Customer name: ")
             new_order["customer_address"] = input("Enter customer address: ")
             new_order["customer_phone"] = input("Enter customer phone number: ")
-            enumerate_courier_list()
+            enumerate_courier_list(courier_list_of_dicts)
             new_order["assigned_courier"] = int(input("Please select the index of a courier to assign to this order\n"))
             new_order["status"] = "Preparing"
             enumerate_products_list(product_list_of_dicts)
@@ -157,9 +164,9 @@ def orders_menu():
             print(f"order list has been updated{order_list_of_dicts}\n")
             orders_menu()
         if order_command == 5:
-            enumerate_order_list(order_list_of_dicts, delete_order_index)
+            enumerate_order_list(order_list_of_dicts)
             delete_order_index = int(input("Please enter the number of the order you would like to delete from the list:\n"))
-            delete_order(order_list_of_dicts)
+            delete_order(order_list_of_dicts, delete_order_index)
             print("Order succesfully deleted\n")
             orders_menu()
     print("Exiting to main menu")

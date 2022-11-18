@@ -1,3 +1,5 @@
-customer_name,customer_address,customer_phone,assigned_courier,status
-Philip J. Fry,Planet Express West 57th Street Manhatten New New York United States,07300030001,1,preparing
-James montgomery,123 left at the fork rotheram,098765456789,18,preparing
+customer_name,customer_address,customer_phone,assigned_courier,status,items
+Philip J. Fry,Planet Express West 57th Street Manhatten New New York United States,07300030001,1,preparing,1
+James montgomery,123 left at the fork rotheram,098765456789,18,preparing,1
+Yogi Bear,Jellyoston National Park USA,98765678,2,preparing,1
+
