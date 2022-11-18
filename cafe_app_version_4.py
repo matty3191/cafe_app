@@ -2,29 +2,24 @@ import os
 import time
 from couriers_crud_functions import create_new_courier, delete_courier, update_courier
 
-from orders_crud_functions import (create_new_order, delete_order,
-                                   update_order, update_order_status)
-from user_interface_layer import courier_menu_interface, enumerate_courier_list, enumerate_order_list, enumerate_order_status_list, order_menu_interface
-from utility_functions import (courier_list_of_dicts, order_list_of_dicts,
-                               product_list_of_dicts, save_courier_files,
-                               save_product_files)
+from orders_crud_functions import create_new_order, delete_order, update_order, update_order_status
+from products_crud_functions import create_new_product, delete_product, update_product
+from user_interface_layer import courier_menu_interface, enumerate_courier_list, enumerate_order_list, enumerate_order_status_list, enumerate_organise_orders_by_list, enumerate_products_list, main_menu_options, order_menu_interface
+from utility_functions import courier_list_of_dicts, order_list_of_dicts, product_list_of_dicts, save_courier_files,save_product_files
 
 order_status_list = ["preparing", "out for delivery", "delivered"]
+organise_orders_by_list = ["View all orders", "Orders matching a courier", "Orders matching an order status"]
 ###################################### application start ##############################################
 print("Howdy Partner, welcome to your custom cafe management app.\n")
 time.sleep(1)
 
 ## Main Menu ##
 def main_menu():
-    # displays main menu, uses input to return selected menu
-    command = int(input("""Please type the number for the menu option below\n\n
-0) Exit.\n
-1) Product menu.\n
-2) Courier menu.\n
-3) Orders menu\n"""))
+    main_menu_options()
+    command = int(input('Enter number to navigate menu:\n'))
     while command != 0:
         if command >3 or command <0:
-            print("Error")
+            print("\nError: Enter a valid command: \n")
             time.sleep(2)
             main_menu()
         if command == 1:
@@ -33,8 +28,6 @@ def main_menu():
             courier_menu()
         if command == 3:
             orders_menu()        
-    # persist everythin but orders then exit  
-    # save data, close files
     print("Saving data")
     save_courier_files()
     save_product_files()
@@ -45,62 +38,39 @@ def main_menu():
 
 ## Product menu ##
 def product_menu():
-    # displays p menu, uses input to return selected menu
-    p_command = int(input("""
-Product Menu:\n
-Please select from the options below:\n\n
-0) Exit.\n
-1) Product list.\n
-2) Create new product.\n
-3) Update exsiting product.\n
-4) Remove product.\n"""))
+    p_command = int(input('\nEnter number to navigate menu: \n'))
     while p_command != 0:
         if p_command >4 or p_command <0:
-            print("Error")
+            print("\nError: Enter a valid command: \n")
             time.sleep(2)
             product_menu()
         if p_command == 1:
-            view_products()
+            enumerate_products_list(product_list_of_dicts)
+            product_menu()
         if p_command == 2:
-            create_new_product()
+            new_product_name = input("Please enter the name of the new product:\n")
+            new_product_price = input("please enter the price of the product\n")
+            create_new_product(product_list_of_dicts, new_product_name, new_product_price)
+            print("New item has been added to the product list\n")
+            print(product_list_of_dicts)
+            product_menu()
         if p_command == 3:
-            update_product()
+            enumerate_products_list(product_list_of_dicts)
+            product_index = int(input("Please enter the index of the product you wish to update\n"))
+            name_or_price = input("Enter either name or price\n")
+            product_replace_value = input("\nPlease enter the new information.\n")
+            update_product(product_list_of_dicts, product_index, name_or_price, product_replace_value)
+            print(f"product list has been updated\n")
+            product_menu()
         if p_command == 4:
-            delete_product()
+            enumerate_products_list(product_list_of_dicts)
+            delete_index = int(input("Please enter the index of the product you wish to delete\n"))
+            delete_product(product_list_of_dicts, delete_index)
+            print(f"Product removed from list\n{product_list_of_dicts}\n")
+            product_menu()
             
     print("Exiting to main menu")
     main_menu()
-
-def enumerate_products():
-    for (i, item) in enumerate(product_list_of_dicts):
-        print(i, item, "\n")
-
-def view_products():
-    enumerate_products()
-    product_menu()
-
-def create_new_product():
-    # uses input to create list item. returns to p menu
-    product_list_of_dicts.append({'name':input("Please enter the name of the new product:\n"), 'price':input("please enter the price of the product\n")})
-    print("New item has been added to the product list\n")
-    print(product_list_of_dicts)
-    product_menu()
-
-def update_product():
-    # uses input to update list item. returns to p menu
-    enumerate_products(product_list_of_dicts, order_status_list, enumerate_order_list, orders_menu)
-    product_list_of_dicts[int(input("Please enter the index of the product you wish to update\n"))][input("Enter either name or price\n")] = input("\nPlease enter the new information.\n")
-    print(f"product list has been updated\n")
-    product_menu()
-
-def delete_product():
-    # uses input to delete list item. returns to p menu
-    enumerate_products()
-    del product_list_of_dicts[int(input("Please enter the index of the product you wish to delete\n"))]
-    print(f"Product removed from list\n{product_list_of_dicts}\n")
-    product_menu()
-
-
 
 ## courier menu ##
 def courier_menu():
@@ -108,7 +78,7 @@ def courier_menu():
     c_command = int(input("\nEnter number to navigate menu: \n"))
     while c_command != 0:
         if c_command >4 or c_command <0:
-            print("Error")
+            print("\nError: Enter a valid command: \n")
             time.sleep(2)
             courier_menu()
         if c_command == 1:
@@ -143,20 +113,21 @@ def orders_menu():
     order_command = int(input("\nEnter number to navigate menu: \n"))
     while order_command != 0:
         if order_command >5 or order_command <0:
-            print("Error")
+            print("\nError: Enter a valid command: \n")
             time.sleep(2)
             orders_menu()
-        if order_command == 1: #TODO narrow down functions from CRUD / user interface layer
-            enumerate_order_list(order_list_of_dicts)
+        if order_command == 1: 
+            enumerate_order_list(order_list_of_dicts) 
             orders_menu()
-        if order_command == 2:
+        if order_command == 2: 
             print("Create New Order")
             new_order = {
                 "customer_name":"",
                 "customer_address":"",
                 "customer_phone":"",
                 "assigned_courier":"",
-                "status":""
+                "status":"",
+                "items":""
             }
             new_order["customer_name"] = input("Enter Customer name: ")
             new_order["customer_address"] = input("Enter customer address: ")
@@ -164,6 +135,8 @@ def orders_menu():
             enumerate_courier_list()
             new_order["assigned_courier"] = int(input("Please select the index of a courier to assign to this order\n"))
             new_order["status"] = "Preparing"
+            enumerate_products_list(product_list_of_dicts)
+            new_order["items"] = input("Select the items to add to the order, mulitple items are comma separated:\n")
             create_new_order(order_list_of_dicts, new_order)
             print("New order has been added\n")
             orders_menu()

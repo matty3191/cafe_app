@@ -12,6 +12,10 @@ New to version 4:
 - written unit tests
 - broken down functions
 
+- project background
+- client requirements
+
+
 Overview
 Your client has launched a pop-up café in a busy business district. They
 are offering home-made lunches and refreshments to the surrounding
