@@ -1,22 +1,21 @@
 New to version 4:
 
 - converted lists into dictionaries i.e. {"name" : "coke zero", "price" : 0.8}, {"name" : "Patrick", "phone" : "0798776887"}
-- added courier and items to the order dict
-- converted .txt into .csv files
+- added assigned courier and items to the order dict
+- started using .csv files in place of .txt
 - restructured directory and modules
     - set up new files and folderswhich will:
         - eventually house the abstracted functions / classes
         - have a separate unit testing file
-- implemented OOP to abstract functions away from the actual application
+- implemented some abstraction to take some functions away from the main application
 - created this READ-ME file
 - written unit tests
-- broken down functions
-
-- project background
-- client requirements
+- broken down core functions without changing app functionality to aid testing core funcitonality.
 
 
-Overview
+
+
+Project background
 Your client has launched a pop-up café in a busy business district. They
 are offering home-made lunches and refreshments to the surrounding
 offices. As such, they require a software application which helps them to
@@ -33,16 +32,21 @@ to bring back our persistence functionality.
 To show that our code works, we will also need to write unit tests to prove that
 our app works correctly
 
-Goals
+- client requirements
 As a user I want to:
 • create a product, courier, or order dictionary and add it to a list
 • view all products, couriers, or orders
 • update the status of an order
 • persist my data
 • STRETCH update or delete a product, order, or courier
-• BONUS list orders by status or courier
+
 
 - How did you design meet the requirements?
 - How did you guarantee the project requirements?
+I applied unit testing to each element of core functionality. So as per the client requirements the application must read and write data to CSV files, perform C.R.U.D on each product, order and courier, so after purifying the functions and abstracting them away I wrote unit tests on each to ensure that they performed without returning any unexpected results.
+
 - If you had more time, what is one thing you would improve on?
+If I had more time I would have used classes to group things together and allow for further abstraction making the application even more lightweight. Furthermore I would have persisted the data in a dtabase an accessed it via an API to give some secrurity to the data and easier manipulation through my local machine.
+
 - what did you most enjoy about implementing the project?
+the thing i enjoyed implementing the most was abstracting all my core functionality away from the main application and reducing those functions down to as pure as i could make them while still retaining the main functionality. This process made clear to me how best to structure a function to make it easier to test. This really cleared up my code and made it much easier for me to read 

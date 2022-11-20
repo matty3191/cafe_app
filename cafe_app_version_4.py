@@ -6,7 +6,7 @@ from products_crud_functions import create_new_product, delete_product, update_p
 from user_interface_layer import (
                                 courier_menu_interface, enumerate_courier_list, enumerate_order_list, 
                                 enumerate_order_status_list, enumerate_products_list, main_menu_options, 
-                                order_menu_interface, products_menu
+                                order_menu_interface, products_menu_interface
                                 )
 from utility_functions import (courier_list_of_dicts, order_list_of_dicts, product_list_of_dicts, 
                                 save_courier_files, save_orders_files,save_product_files
@@ -44,7 +44,7 @@ def main_menu():
 
 ## Product menu ##
 def product_menu():
-    products_menu()
+    products_menu_interface()
     p_command = int(input('\nEnter number to navigate menu: \n'))
     while True:
         if p_command >4 or p_command <0:

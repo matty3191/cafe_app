@@ -1,20 +1,18 @@
 ###"""Main menu interface"""###
 def main_menu_options():
-    print ("""Please type the number for the menu option below\n\n
+    print ("""Main Menu\n
 0) Exit.\n
 1) Product menu.\n
 2) Courier menu.\n
 3) Orders menu\n""")
 
 ###"""products interface"""###
-def products_menu():
-    print("""
-Product Menu:\n
-Please select from the options below:\n\n
+def products_menu_interface():
+    print("""Product Menu:\n
 0) Exit.\n
 1) Product list.\n
 2) Create new product.\n
-3) Update exsiting product.\n
+3) Update existing product.\n
 4) Remove product.\n""")
 
 def enumerate_products_list(product_list_of_dicts):
@@ -23,13 +21,11 @@ def enumerate_products_list(product_list_of_dicts):
 
 ###"""couriers interface"""###
 def courier_menu_interface():
-    print("""
-Courier Menu:\n
-Please select from the options below:\n\n
+    print("""Courier Menu:\n
 0) Exit.\n
 1) Courier list.\n
 2) Create new courier.\n
-3) Update exsiting courier.\n
+3) Update existing courier.\n
 4) Remove courier.\n""")
 
 def enumerate_courier_list(courier_list_of_dicts):
