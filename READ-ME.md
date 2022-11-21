@@ -4,7 +4,7 @@ New to version 4:
 - added assigned courier and items to the order dict
 - started using .csv files in place of .txt
 - restructured directory and modules
-    - set up new files and folderswhich will:
+    - set up new files and folders which will:
         - eventually house the abstracted functions / classes
         - have a separate unit testing file
 - implemented some abstraction to take some functions away from the main application
@@ -41,7 +41,10 @@ As a user I want to:
 • STRETCH update or delete a product, order, or courier
 
 
-- How did you design meet the requirements?
+- How did your design meet the requirements?
+By separating out my functions into 3 different layers (user inferface layer, utility functions, crud functions), I was able to organise my code in sections which allowed me to go through each user requirment and see if my code met it. So my application diplays a main menu, product menu, courier menu and orders menu; accepts user input to navigate through the menus; uses user input to perform CRUD in each sub menu and persists data when the apllication closes.
+
+
 - How did you guarantee the project requirements?
 I applied unit testing to each element of core functionality. So as per the client requirements the application must read and write data to CSV files, perform C.R.U.D on each product, order and courier, so after purifying the functions and abstracting them away I wrote unit tests on each to ensure that they performed without returning any unexpected results.
 
