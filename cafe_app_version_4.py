@@ -20,9 +20,14 @@ time.sleep(1)
 def main_menu():
     while True:
         main_menu_options()
-        command = int(input('Enter number to navigate menu:\n'))
+        command = input('Enter number to navigate menu:\n')
+        try:
+            command = int(command)
+        except ValueError:
+            print("Error: Please enter a valid command")
+            continue
         if command >3 or command <0:
-            print("\nError: Enter a valid command: \n")
+            print("\nError: Please enter a valid command: \n")
             time.sleep(2)
         elif command == 1:
             product_menu()
@@ -45,7 +50,12 @@ def main_menu():
 def product_menu():
     while True:
         products_menu_interface()
-        p_command = int(input('\nEnter number to navigate menu: \n'))
+        p_command = input('\nEnter number to navigate menu: \n')
+        try:
+            p_command = int(p_command)
+        except ValueError:
+            print("Error: Please enter a valid command")
+            continue
         if p_command >4 or p_command <0:
             print("\nError: Enter a valid command: \n")
             time.sleep(2)
@@ -54,30 +64,42 @@ def product_menu():
         elif p_command == 2:
             while True:
                 new_product_name = input("Please enter the name of the new product:\n")
-                if new_product_name == "":
-                    print("Error, field cannont be blank\n")
-                elif len(new_product_name) > 25:
-                    print("Error, name cannot exceed 25 characters\n")
-                else:
-                    break
-            while True:
-                new_product_price = (input("please enter the price of the product\n"))
-                if new_product_price == "":
-                    print("Error, field cannot be blank\n")
-                elif type(new_product_name) != float:
-                    print("Error, price must take the format of a decimal point number\n")
+                if new_product_name == "" or len(new_product_name) > 25:
+                    print("Error, field cannont be blank or exceed 25 characters\n")
+                new_product_price = input("please enter the price of the product\n")
+                try:
+                    new_product_price = float(new_product_price)
+                except ValueError:
+                    print("Error, please enter a decimal point number\n")
+                    continue
                 else:
                     break
             create_new_product(product_list_of_dicts, new_product_name, new_product_price)
             print("New item has been added to the product list\n")
             print(product_list_of_dicts)
         elif p_command == 3:
-            enumerate_products_list(product_list_of_dicts)
-            product_index = int(input("Please enter the index of the product you wish to update\n"))
-            name_or_price = input("Enter either name or price\n")
-            product_replace_value = input("\nPlease enter the new information.\n")
-            update_product(product_list_of_dicts, product_index, name_or_price, product_replace_value)
-            print(f"product list has been updated\n")
+            while True:
+                enumerate_products_list(product_list_of_dicts)
+                product_index = input("Please enter the index of the product you wish to update\n")
+                try:
+                    product_index = int(product_index)
+                except ValueError:
+                    print("Error: Index must be a whole number")
+                    continue
+                if product_index not in range(len(product_list_of_dicts)):
+                    print ("Error: Entered index value out of range")  
+                    continue
+                name_or_price = input("Enter either name or price\n")
+                if name_or_price == "name" or name_or_price == "price": 
+                    pass
+                else:
+                    print("Error: Please enter \'name\' or \'price\'")
+                    continue                    
+                product_replace_value = input("\nPlease enter the new information.\n")
+                #if name_or_price == "name", product_value_replace must be an str
+                #elif name_or_price == "price", prodcut_replace_value must be a float
+                update_product(product_list_of_dicts, product_index, name_or_price, product_replace_value)
+                print(f"product list has been updated\n")
         elif p_command == 4:
             enumerate_products_list(product_list_of_dicts)
             delete_index = int(input("Please enter the index of the product you wish to delete\n"))
