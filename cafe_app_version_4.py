@@ -52,14 +52,22 @@ def product_menu():
         elif p_command == 1:
             enumerate_products_list(product_list_of_dicts)
         elif p_command == 2:
-            new_product_name = input("Please enter the name of the new product:\n")
             while True:
+                new_product_name = input("Please enter the name of the new product:\n")
                 if new_product_name == "":
-                    print("Error, please enter valid input")
-                    break
+                    print("Error, field cannont be blank\n")
+                elif len(new_product_name) > 25:
+                    print("Error, name cannot exceed 25 characters\n")
                 else:
-                    continue
-            new_product_price = float(input("please enter the price of the product\n"))
+                    break
+            while True:
+                new_product_price = (input("please enter the price of the product\n"))
+                if new_product_price == "":
+                    print("Error, field cannot be blank\n")
+                elif type(new_product_name) != float:
+                    print("Error, price must take the format of a decimal point number\n")
+                else:
+                    break
             create_new_product(product_list_of_dicts, new_product_name, new_product_price)
             print("New item has been added to the product list\n")
             print(product_list_of_dicts)
