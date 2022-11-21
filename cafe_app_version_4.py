@@ -18,13 +18,12 @@ time.sleep(1)
 
 ## Main Menu ##
 def main_menu():
-    main_menu_options()
-    command = int(input('Enter number to navigate menu:\n'))
     while True:
+        main_menu_options()
+        command = int(input('Enter number to navigate menu:\n'))
         if command >3 or command <0:
             print("\nError: Enter a valid command: \n")
             time.sleep(2)
-            main_menu()
         elif command == 1:
             product_menu()
         elif command == 2:
@@ -44,23 +43,26 @@ def main_menu():
 
 ## Product menu ##
 def product_menu():
-    products_menu_interface()
-    p_command = int(input('\nEnter number to navigate menu: \n'))
     while True:
+        products_menu_interface()
+        p_command = int(input('\nEnter number to navigate menu: \n'))
         if p_command >4 or p_command <0:
             print("\nError: Enter a valid command: \n")
             time.sleep(2)
-            product_menu()
         elif p_command == 1:
             enumerate_products_list(product_list_of_dicts)
-            product_menu()
         elif p_command == 2:
             new_product_name = input("Please enter the name of the new product:\n")
-            new_product_price = input("please enter the price of the product\n")
+            while True:
+                if new_product_name == "":
+                    print("Error, please enter valid input")
+                    break
+                else:
+                    continue
+            new_product_price = float(input("please enter the price of the product\n"))
             create_new_product(product_list_of_dicts, new_product_name, new_product_price)
             print("New item has been added to the product list\n")
             print(product_list_of_dicts)
-            product_menu()
         elif p_command == 3:
             enumerate_products_list(product_list_of_dicts)
             product_index = int(input("Please enter the index of the product you wish to update\n"))
@@ -68,67 +70,57 @@ def product_menu():
             product_replace_value = input("\nPlease enter the new information.\n")
             update_product(product_list_of_dicts, product_index, name_or_price, product_replace_value)
             print(f"product list has been updated\n")
-            product_menu()
         elif p_command == 4:
             enumerate_products_list(product_list_of_dicts)
             delete_index = int(input("Please enter the index of the product you wish to delete\n"))
             delete_product(product_list_of_dicts, delete_index)
             print(f"Product removed from list\n{product_list_of_dicts}\n")
-            product_menu()
         else:
             print("Exiting to main menu")
-            main_menu()
-            
+            break
 
 
 ## courier menu ##
 def courier_menu():
-    courier_menu_interface()
-    c_command = int(input("\nEnter number to navigate menu: \n"))
     while True:
+        courier_menu_interface()
+        c_command = int(input("\nEnter number to navigate menu: \n"))
         if c_command >4 or c_command <0:
             print("\nError: Enter a valid command: \n")
             time.sleep(2)
-            courier_menu()
         elif c_command == 1:
             enumerate_courier_list(courier_list_of_dicts)
-            courier_menu()
         elif c_command == 2:
             new_courier_name = input("Please enter the name of the new courier:\n")
             new_courier_phone = input("please enter the couriers contact number:\n")
             create_new_courier(courier_list_of_dicts, new_courier_name, new_courier_phone)
             print("New courier succesfully added")
-            courier_menu()
         elif c_command == 3:
             enumerate_courier_list(courier_list_of_dicts)
             update_courier_index = int(input("Index value of courier to update: \n"))
             name_or_phone = input("Enter name or phone: \n")
             new_courier_information = input("Enter new information: ")
             update_courier(courier_list_of_dicts, update_courier_index, name_or_phone, new_courier_information)
-            courier_menu()
         elif c_command == 4:
             enumerate_courier_list(courier_list_of_dicts)
             delete_index_value = int(input("Please enter the index of the courier you wish to delete\n"))
             delete_courier(courier_list_of_dicts, delete_index_value)
-            courier_menu()
         else:
             print("Exiting to main menu")
-            main_menu()
+            break
 
 
 
 ## orders menu ##
 def orders_menu():
-    order_menu_interface()
-    order_command = int(input("\nEnter number to navigate menu:\n"))
     while True:
+        order_menu_interface()
+        order_command = int(input("\nEnter number to navigate menu:\n"))
         if order_command >5 or order_command <0:
             print("\nError: Enter a valid command: \n")
             time.sleep(2)
-            orders_menu()
         elif order_command == 1: 
             enumerate_order_list(order_list_of_dicts) 
-            orders_menu()
         elif order_command == 2: 
             print("Create New Order")
             new_order = {
@@ -149,7 +141,6 @@ def orders_menu():
             new_order["items"] = input("Select the items to add to the order, mulitple items are comma separated:\n")
             create_new_order(order_list_of_dicts, new_order)
             print("New order has been added\n")
-            orders_menu()
         elif order_command == 3:
             enumerate_order_list(order_list_of_dicts)
             order_status_index_update = int(input("Please enter the index of the order to update the status of\n"))
@@ -157,7 +148,6 @@ def orders_menu():
             new_order_status_value = order_status_list[int(input("Choose the index of the new order status:\n"))]
             update_order_status(order_list_of_dicts, order_status_index_update, new_order_status_value)
             print(f"You have succesfully updated the order status")
-            orders_menu()
         elif order_command == 4:
             enumerate_order_list(order_list_of_dicts)
             order_index = int(input("Enter the index of the order you wish to update\n"))
@@ -165,15 +155,13 @@ def orders_menu():
             new_order_value = input("Enter the updated information\n")
             update_order(order_list_of_dicts, order_index, order_key, new_order_value)
             print(f"order list has been updated{order_list_of_dicts}\n")
-            orders_menu()
         elif order_command == 5:
             enumerate_order_list(order_list_of_dicts)
             delete_order_index = int(input("Please enter the number of the order you would like to delete from the list:\n"))
             delete_order(order_list_of_dicts, delete_order_index)
             print("Order succesfully deleted\n")
-            orders_menu()
         else:
             print("Exiting to main menu")
-            main_menu()
+            break
 
 main_menu ()
