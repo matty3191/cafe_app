@@ -66,7 +66,7 @@ as the code base became more complex with client requirements, this week I focus
 * A list of couriers should be a list of strings, i.e: ["John"]
 * An order should be a dict, i.e:
 
--Retro:**
+**Retro:**
 
 In week 3, I noticed that I was re-using a lot of code between different menu options, as a result I began implementing funcitons in my code. The purpose was to begin grouping similiar blocks of code together for clarities sake when reading. This also removed the dependency of the application to run on 'if' statements as python read the code line by line. This meant I could introduce an entry point to the app by calling a function after defining everything. While this did improve the efficiency under the hood, I did also start down a path of nesting function calls and recursive function calling. As the code became more complex I also removed the screen clear and time functions from most of my code for the sake of clarity/ readabliity. I also implemented code to save data to .txt files. This meant I had to begin resturcturing my directory to better suit the needs of the application.
 
