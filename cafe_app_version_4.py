@@ -59,8 +59,10 @@ def product_menu():
         if p_command >4 or p_command <0:
             print("\nError: Enter a valid command: \n")
             time.sleep(2)
+            
         elif p_command == 1: #view products
             enumerate_products_list(product_list_of_dicts)
+
         elif p_command == 2: #add new product
             while True:
                 new_product_name = input("Please enter the name of the new product:\n")
@@ -78,6 +80,7 @@ def product_menu():
             create_new_product(product_list_of_dicts, new_product_name, new_product_price)
             print("New item has been added to the product list\n")
             enumerate(product_list_of_dicts)
+
         elif p_command == 3: #update existing product
             while True:
                 enumerate_products_list(product_list_of_dicts)
@@ -106,6 +109,7 @@ def product_menu():
                 update_product(product_list_of_dicts, product_index, name_or_price, product_replace_value)
                 print("\nproduct list has been updated\n")
                 break
+
         elif p_command == 4: # delete product
             enumerate_products_list(product_list_of_dicts)
             delete_index = input("Please enter the index of the product you wish to delete\n")
@@ -119,6 +123,7 @@ def product_menu():
                 continue
             delete_product(product_list_of_dicts, delete_index)
             print(f"Product removed from list\n{enumerate_products_list(product_list_of_dicts)}\n")
+
         else:
             print("Exiting to main menu")
             break
@@ -137,8 +142,10 @@ def courier_menu():
         if c_command >4 or c_command <0:
             print("\nError: Enter a valid command: \n")
             time.sleep(2)
+
         elif c_command == 1: # view list of couriers
             enumerate_courier_list(courier_list_of_dicts)
+
         elif c_command == 2: # add new courier
             new_courier_name = input("Please enter the name of the new courier:\n")
             if new_courier_name == "" or len(new_courier_name) >= 50:
@@ -155,6 +162,7 @@ def courier_menu():
                 continue
             create_new_courier(courier_list_of_dicts, new_courier_name, new_courier_phone)
             print("New courier succesfully added\n")
+
         elif c_command == 3: # update existing courier
             enumerate_courier_list(courier_list_of_dicts)
             update_courier_index = input("Index value of courier to update:\n")
@@ -186,6 +194,7 @@ def courier_menu():
                     continue
             update_courier(courier_list_of_dicts, update_courier_index, name_or_phone, new_courier_information)
             print("Courier succesfuly updated\n")
+
         elif c_command == 4: # delete courier
             enumerate_courier_list(courier_list_of_dicts)
             delete_index_value = input("Please enter the index of the courier you wish to delete\n")
@@ -199,6 +208,7 @@ def courier_menu():
                 continue
             delete_courier(courier_list_of_dicts, delete_index_value)
             print("Succesfully deleted courier.\n")
+
         else:
             print("Exiting to main menu")
             break
@@ -209,7 +219,7 @@ def courier_menu():
 def orders_menu():
     while True:
         order_menu_interface()
-        order_command = int(input("\nEnter number to navigate menu:\n"))
+        order_command = input("\nEnter number to navigate menu:\n")
         try:
             order_command = int(order_command)
         except ValueError:
@@ -218,8 +228,10 @@ def orders_menu():
         if order_command >5 or order_command <0:
             print("\nError: Please enter a valid command: \n")
             time.sleep(2)
+
         elif order_command == 1: # view list of orders
             enumerate_order_list(order_list_of_dicts) 
+
         elif order_command == 2: # add new order
             print("Create New Order")
             new_order = {
@@ -251,6 +263,7 @@ def orders_menu():
             new_order["items"] = input("Select the items to add to the order, mulitple items are comma separated:\n")
             create_new_order(order_list_of_dicts, new_order)
             print("New order has been added\n")
+
         elif order_command == 3: # update existing order status
             enumerate_order_list(order_list_of_dicts)
             order_status_index_update = input("Please enter the index of the order to update the status of\n")
@@ -263,20 +276,24 @@ def orders_menu():
                 print ("Error: Entered index value out of range\n")  
                 continue
             enumerate_order_status_list(order_status_list)
+            status_index = input("Choose the index of the new order status:\n")
             try:
-                new_order_status_value = order_status_list[int(input("Choose the index of the new order status:\n"))]
+                status_index = int(status_index)
             except ValueError:
                 print("Error: Index cannot be blank and must be a whole number\n")
-                try:
-                    new_order_status_value not in range(len(new_order_status_value))
-                except IndexError:
-                    print ("Error: Entered index value out of range\n")  
-                    continue
+                continue
+            try:
+                order_status_list[status_index] not in range(len(order_status_list))
+            except IndexError:
+                print ("Error: Entered index value out of range\n")  
+                continue
+            new_order_status_value = order_status_list[status_index]
             update_order_status(order_list_of_dicts, order_status_index_update, new_order_status_value)
             print(f"You have succesfully updated the order status")
+
         elif order_command == 4: # update existing order
             enumerate_order_list(order_list_of_dicts)
-            order_index = int(input("Enter the index of the order you wish to update\n"))
+            order_index = input("Enter the index of the order you wish to update\n")
             try:
                 order_index = int(order_index)
             except ValueError:
@@ -290,12 +307,9 @@ def orders_menu():
                 print ("Error: Entered value not in list of options\n")  
                 continue
             new_order_value = input("Enter the updated information\n")
-            # if order_key == customer_name
-            # if order_key == customer_phone
-            # if order_key == 
-            # if order_key ==
             update_order(order_list_of_dicts, order_index, order_key, new_order_value)
             print(f"order list has been updated{order_list_of_dicts}\n")
+
         elif order_command == 5: # delete order
             enumerate_order_list(order_list_of_dicts)
             delete_order_index = input("Please enter the number of the order you would like to delete from the list:\n")
@@ -309,6 +323,7 @@ def orders_menu():
                 continue
             delete_order(order_list_of_dicts, delete_order_index)
             print("Order succesfully deleted\n")
+
         else:
             print("Exiting to main menu")
             break
