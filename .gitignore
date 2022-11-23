@@ -4,3 +4,4 @@ cafe_app_version_4_oop.py
 .pytest_cache
 stuff_to_ignore
 orders2.csv
+.coverage
