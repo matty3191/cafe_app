@@ -1,4 +1,4 @@
-# Solo mini project# 
+# Solo mini project # 
 
 ## Project background ##
 
@@ -32,49 +32,92 @@ These requirements have yet to be introduced in the future.
 
 ## Where the application is at now ##
 
-**Key goals for this week:**
+**Requirements for this week:**
 * create a product, courier, or order dictionary and add it to a list
 * view all products, couriers, or orders
 * update the status of an order
 * persist my data
 * STRETCH update or delete a product, order, or courier
+* convert all extising lists into list of dictionaries
+* data should be persisted in .csv files, to a new line for each courier, order, or product.
 * BONUS list orders by status or courier
 
-**Specificaiton:**
-
-* convert all extising lists into list of dictionaries i.e
-    * {
-"name": "Coke Zero",
-"price": 0.8 // Float
-}
-* data should be persisted in .csv files, to a new line for each courier, order, or product.
-
-## In order to meet the requirements, I have ##
+## In order to meet the requirements for this week, I have ##
 - converted lists into lists of  dictionaries i.e. {"name" : "coke zero", "price" : 0.8}, {"name" : "Patrick", "phone" : "0798776887"}
 - added assigned courier and item keys to the order dictionary
 - started using .csv files in place of .txt and modified the file handlers as such
-### Demo File handling functions ###
-![image](https://user-images.githubusercontent.com/115237595/203518534-c2520ceb-2c83-46ca-972f-402bd1433044.png)
-
 - restructured directory and modules
     - set up new files and folders which:
         - have separated out the main app and functions from unit testing
         - sequestered away gitignore files
         - moved the data files to a separate location     
 - restructured my core functions to be as slimline as possible to increase testability and increase longevity of the application.
-### CRUD function ###
-![image](https://user-images.githubusercontent.com/115237595/203517646-06f2a890-bd59-464f-a367-4daa8dfd60b5.png)
-
 - created this READ-ME file.
 - written unit tests for PyTest for all core CRUD and data persistence functionality.
+
+### Demo CRUD function ###
+``` Python
+def create_new_product(product_list_of_dicts, new_product_name, new_product_price):
+    product_list_of_dicts.append({'name': new_product_name, 'price': new_product_price})
+
+def update_product(product_list_of_dicts, product_index, name_or_price, product_replace_value):
+    product_list_of_dicts[product_index][name_or_price] = product_replace_value
+
+def delete_product(product_list_of_dicts, delete_index):
+    del product_list_of_dicts[delete_index]
+```
+### Demo testing: read/Write ###
+``` Python
+def reading_test_csv():
+    with open('unit_testing/empty_test_csv.csv', 'r') as file:
+        csv_contents = DictReader(file)
+        csv_list = list(csv_contents)
+    return csv_list
+
+workable_csv_list = reading_test_csv()
+new_data = ({'name':'bob', 'phone':'0987656789'},{'name':'bill','phone':'32165484654'})
+### test file writing ###
+def create_new_data_for_test_csv(workable_csv_list, new_data):
+    workable_csv_list = workable_csv_list.extend(new_data)
+
+
+def test_reading_and_writing_to_csv():
+    assert reading_test_csv() == []
+    create_new_data_for_test_csv(workable_csv_list, new_data)
+    assert workable_csv_list == [{'name':'bob', 'phone':'0987656789'},{'name':'bill','phone':'32165484654'}]
+    field_names = ['name','phone']
+    with open('unit_testing/empty_test_csv.csv', 'w' ,newline='') as file:
+        csv_writer = DictWriter(file, fieldnames = field_names)
+        csv_writer.writeheader()
+        for item in workable_csv_list:
+            csv_writer.writerow(dict(item))
+
+    reading_test_csv()
+    assert workable_csv_list == [{'name':'bob', 'phone':'0987656789'},{'name':'bill','phone':'32165484654'}]
+
+    with open('unit_testing/empty_test_csv.csv', 'w') as file:
+        print("file emptied for test repeatabliity")
+```
+
+### Demo testing: update function ###
+
+``` Python
+def test_update_product():
+    stub_product_list = [{
+        'name':'coke', 'price':'1.0'
+        },{
+        'name':'diet coke', 'price':'0.8'
+        }]
+    assert stub_product_list[0]["name"] == "coke"
+    update_product(product_list_of_dicts=stub_product_list, product_index=0, name_or_price="name", product_replace_value="carrot cake")
+    assert stub_product_list[0]["name"] == "carrot cake"
+```
 
 #### This is the structure of the application. ####
 The arrows show which layers communicate and the largest area is the testing layer which indicates what is covered by testing.
 ![image](https://user-images.githubusercontent.com/115237595/203532632-425f3506-323e-42ed-80ab-d137bd69832b.png)
 
 ### - How did your design meet the requirements? ###
-how does each section of code ensure I’ve met the client requirements? what are the pros and cons of each section?
-
 By separating out my functions into 3 different layers (user interface layer, utility functions, crud functions), I was able to organise my code in sections which allowed me to go through each user requirement and see if my code met it. So my application displays a main menu, product menu, courier menu and orders menu; accepts user input to navigate through the menus; uses user input to perform CRUD in each sub menu and persists data when the application closes.
 
 
@@ -84,15 +127,9 @@ The method of testing I chose was unit testing using PyTest. From my research it
 I applied unit testing to each element of core functionality. So as per the client requirements the application must read and write data to CSV files, perform C.R.U.D on each product, order, and courier, so after purifying the functions and abstracting them away I wrote unit tests on each to ensure that they performed without returning any unexpected results. I made each core function as simple as possible, making each perform just a single behaviour i.e. updating an entry. This meant that the testing was simple to as I only had to ensure 1 behaviour was operational. As a result I was able to provide coverage for most of the applications core behaviours in just a few test cases. Furthermore I late stage included some input validations to create a more robust application that should not crash in case of use input error.
 
 In an ideal world, I would put more time into providing more thoughrough testing for all functionalities and not just core functions to create a more robust application that will have a longer shelf life. For example, I did not have enouogh ime to implement unit tests for the main application where the functions are less pure and where the input validations are too. It has been manually tested but this was time costly and could be improved on with more rigorous unit testing / TDD mindset.
-### Demo test read/Write ###
-![image](https://user-images.githubusercontent.com/115237595/203523337-8c4b3b39-13d2-4e2e-b9bf-d0b002652d26.png)
-
-### Demo test update function ###
-![image](https://user-images.githubusercontent.com/115237595/203518216-ebfee787-c932-4c97-88be-5730b4842ea4.png)
-
 
 ### - If you had more time, what is one thing you would improve on? ###
-If I could start this project again, I would have a more in depth discussion with the client from week 1, try to discuss fully the needs of the business and what I/my team are capabale of realistically delivering in the given time frame.
+If I could start this project again, I would have a more in depth discussion with the client from week 1, try to discuss fully the needs of the business and what I/my team are capabale of realistically delivering in the given time frame. I would also make a README from the start and make it much more concise!
 
 If I had more time, I would have implemented a more rigorous functional programming mindset to group things together and allow for further abstraction making the application even more lightweight. This would have further allowed me to remove things like messy input validations into a separate file and make the base code more readable for future developers and more easily testable. In addition, I would have implemented test driven development (TDD) from the beginning. It rapidly became apparent as the clients requirements changed week by week that testing additions to the code after it has been written is difficult and takes a long time. 
 
