@@ -28,7 +28,7 @@ The requirements evolved again, this time every list (couriers, orders and produ
 
 ## Week 5 + 6 ## 
 The client now wants to persist data in a database and the option to list orders by the order status and courier.
-These requirements have yet to be introduced in the future.
+These requirements will be introduced in the future.
 
 ## Where the application is at now ##
 
