@@ -5,3 +5,4 @@ cafe_app_version_4_oop.py
 stuff_to_ignore
 orders2.csv
 .coverage
+__pycache__
