@@ -6,3 +6,5 @@ stuff_to_ignore
 orders2.csv
 .coverage
 __pycache__
+.gitignore
+.vscode
